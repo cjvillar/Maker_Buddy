@@ -1,7 +1,19 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth.forms import UserCreationForm
 
-# Create your views here.
-def user_profile(request):
-    return render(request, "test.html", {
-        "title": "Accounts App"
+def signup(request):
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("login")
+    else:
+        form = UserCreationForm()
+
+    return render(request, "accounts/signup.html", {"form": form})
+
+
+def user_profile(request, username):
+    return render(request, "accounts/profile.html", {
+        "username": username
     })
