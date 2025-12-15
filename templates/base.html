@@ -1,6 +1,13 @@
 
+<body>
+  <h1 style="color:red;">BASE TEMPLATE LOADED</h1>
 
-{% block content %}
-  <h1>{{ title }}</h1>
-  <p>base template place holder</p>
-{% endblock %}
+  <nav>
+    <a href="{% url 'public_feed:home' %}">Feed</a>
+ 
+    <a href="{% url 'projects:list' %}">Projects</a>
+  </nav>
+
+  {% block content %}{% endblock %}
+</body>
+
