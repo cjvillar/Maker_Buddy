@@ -11,3 +11,9 @@ python -m venv .vpip env
 pip install -r requirments.txt
 
 ```
+
+### Check build
+```bash
+python manage.py check
+python manage.py runserver
+```
