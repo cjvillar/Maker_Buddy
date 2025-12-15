@@ -17,3 +17,9 @@ pip install -r requirments.txt
 python manage.py check
 python manage.py runserver
 ```
+
+### Make Migrations
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
