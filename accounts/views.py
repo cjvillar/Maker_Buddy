@@ -1,4 +1,5 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
 
@@ -15,4 +16,18 @@ def signup(request):
 
 
 def user_profile(request, username):
-    return render(request, "accounts/profile.html", {"username": username})
+    profile_user = get_object_or_404(User, username=username)
+
+    # projects = profile_user.projects.all().order_by("-created_at")
+    projects = profile_user.maker_projects.select_related("owner").order_by(
+        "-created_at"
+    )
+
+    return render(
+        request,
+        "accounts/profile.html",
+        {
+            "profile_user": profile_user,
+            "projects": projects,
+        },
+    )

@@ -1,5 +1,18 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Profile: {{ username }}</h1>
-<p>You are logged in</p>
+<h1>{{ profile_user.username }}</h1>
+
+{% if projects %}
+  <h2>Projects</h2>
+  <ul>
+    {% for project in projects %}
+      <li>
+        <strong>{{ project.title }}</strong><br>
+        {{ project.description|truncatewords:20 }}
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No projects yet.</p>
+{% endif %}
 {% endblock %}

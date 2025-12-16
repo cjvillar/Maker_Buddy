@@ -31,3 +31,9 @@ Run Accounts test:
 python manage.py test accounts/tests
 
 ```
+
+### Formatting
+I use python Black formatter:
+```bash
+ python -m black .
+```
