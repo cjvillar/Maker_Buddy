@@ -1,7 +1,5 @@
-{% extends "base.html" %}
-
 {% block content %}
-<nav>
+<nav class="container nav">
     <a href="{% url 'public_feed:home' %}">Feed</a>
 
     {% if user.is_authenticated %}
