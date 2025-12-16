@@ -23,3 +23,11 @@ python manage.py runserver
 python manage.py makemigrations
 python manage.py migrate
 ```
+
+### Run Test
+Run Accounts test:
+
+```bash
+python manage.py test accounts/tests
+
+```
