@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 
+
 def signup(request):
     if request.method == "POST":
         form = UserCreationForm(request.POST)
@@ -14,6 +15,4 @@ def signup(request):
 
 
 def user_profile(request, username):
-    return render(request, "accounts/profile.html", {
-        "username": username
-    })
+    return render(request, "accounts/profile.html", {"username": username})
