@@ -1,7 +1,17 @@
 {% extends "base.html" %}
 {% block content %}
+{% load static %}
 
-<h1>{{ profile_user.username }}</h1>
+<div class=".container">
+{% if profile_user.profile.profile_pic %}
+  <img src="{{ profile_user.profile.profile_pic.url }}">
+{% else %}
+  <img src="{% static 'images/default_profile.png' %}" 
+       alt="Default profile">
+{% endif %}
+<h1>{{ profile_user.profile.display_name}}</h1>
+
+<div class=".bio"><p>{{ profile_user.profile.bio }}</p></div>
 
 {% if projects %}
   <h2>Projects</h2>
@@ -16,4 +26,5 @@
 {% else %}
   <p>No projects yet.</p>
 {% endif %}
+</div>
 {% endblock %}

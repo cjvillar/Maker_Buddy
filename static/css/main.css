@@ -45,6 +45,12 @@ main {
    gap: 20px;
 }
 
+img {
+  width:150px; 
+  height:auto; 
+  border-radius:50%;
+}
+
 .nav a:hover {
   text-decoration: underline;
 }
@@ -89,6 +95,13 @@ a:hover {
 a:active {
   color:  #f03b04; 
 }
+
+/* profile  */
+.bio {
+   font-size: 1.1rem;
+   font-style: normal;
+}
+
 
 /* Projects Feed */
 

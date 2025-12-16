@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
+from .forms import UserProfileForm
 
 
 def signup(request):
@@ -31,3 +33,17 @@ def user_profile(request, username):
             "projects": projects,
         },
     )
+
+
+@login_required
+def edit_profile(request):
+    profile = request.user.profile
+    if request.method == "POST":
+        form = UserProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect("accounts:profile", username=request.user.username)
+    else:
+        form = UserProfileForm(instance=profile)
+
+    return render(request, "accounts/edit_profile.html", {"form": form})
