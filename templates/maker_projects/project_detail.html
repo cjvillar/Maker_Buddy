@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<article class="project-detail">
+
+  <h1>{{ project.title }}</h1>
+
+  <p>
+    by
+    <a href="{% url 'accounts:profile' project.owner.username %}">
+      {{ project.owner.profile.display_name|default:project.owner.username }}
+    </a>
+  </p>
+
+  <p class="project-date">
+    Created {{ project.created_at|date:"F j, Y" }}
+  </p>
+
+  {% if project.image %}
+    <img src="{{ project.image.url }}" alt="{{ project.title }}">
+  {% endif %}
+
+  <section class="project-description">
+    <h2>Description</h2>
+    <p>{{ project.description }}</p>
+  </section>
+
+  {% if project.code_snippet %}
+    <section class="project-code">
+      <h2>Code</h2>
+      <pre><code>{{ project.code_snippet }}</code></pre>
+    </section>
+  {% endif %}
+
+ {% if user == project.owner %}
+  <a href="{% url 'maker_projects:edit' project.pk %}">Edit</a> |
+  <a href="{% url 'maker_projects:delete' project.pk %}">Delete</a>
+{% endif %}
+
+</article>
+{% endblock %}

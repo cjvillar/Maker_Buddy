@@ -20,7 +20,6 @@ def signup(request):
 def user_profile(request, username):
     profile_user = get_object_or_404(User, username=username)
 
-    # projects = profile_user.projects.all().order_by("-created_at")
     projects = profile_user.maker_projects.select_related("owner").order_by(
         "-created_at"
     )

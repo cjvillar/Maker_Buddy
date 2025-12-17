@@ -131,6 +131,19 @@ a:active {
 }
 
 
+.project-detail img {
+    max-width: 100%;
+    margin: 1rem 0;
+}
+
+.project-code pre {
+    background: #111;
+    color: #0f0;
+    padding: 1rem;
+    overflow-x: auto;
+}
+
+
 /* forms */
 
 form {
