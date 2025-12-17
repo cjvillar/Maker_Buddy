@@ -5,14 +5,13 @@
 
 {% block content %}
 <div class=".container">
-<h1>Maker Projects</h1>
+  <h1>Maker Projects</h1>
 
-{% for project in projects %}
+  {% for project in projects %}
   <article class="project-card">
     <h2><a href="{% url 'maker_projects:detail' project.pk %}">
-    {{ project.title }}
-  </a></h2>
-
+        {{ project.title }}
+      </a></h2>
     <p>
       by
       <a href="{% url 'accounts:profile' project.owner.username %}">
@@ -23,15 +22,27 @@
     <p>{{ project.description|truncatewords:30 }}</p>
 
     {% if project.image %}
-      <img src="{{ project.image.url }}" alt="{{ project.title }}">
+    <img src="{{ project.image.url }}" alt="{{ project.title }}">
     {% endif %}
 
     {% if project.code_snippet %}
-      <pre><code>{{ project.code_snippet }}</code></pre>
+    <pre><code>{{ project.code_snippet }}</code></pre>
     {% endif %}
   </article>
-{% empty %}
+  {% empty %}
   <p>No projects yet. Be the first to share!</p>
-{% endfor %}
-{% endblock %}
+  {% endfor %}
+
+<div class="pagination">
+  {% if projects.has_previous %}
+    <a href="?page={{ projects.previous_page_number }}">Previous</a>
+  {% endif %}
+
+  <span>Page {{ projects.number }} of {{ projects.paginator.num_pages }}</span>
+
+  {% if projects.has_next %}
+    <a href="?page={{ projects.next_page_number }}">Next</a>
+  {% endif %}
+
+  {% endblock %}
 </div>
