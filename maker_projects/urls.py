@@ -1,8 +1,9 @@
 from django.urls import path
-from .views import maker_projects
+from .views import create_project
 
-app_name = "projects"
+app_name = "maker_projects"
 
 urlpatterns = [
-    path("", maker_projects, name="list"),
+    path("", create_project, name="list"),
+    path("create/", create_project, name="create"),
 ]

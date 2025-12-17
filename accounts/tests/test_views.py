@@ -19,27 +19,26 @@ class SignupTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertTrue(User.objects.filter(username="test_user").exists())
 
+
 class ProfileEditTests(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(username='test_user', password='PASSword')
-        self.client.login(username='test_user', password='PASSword')
+        self.user = User.objects.create_user(username="test_user", password="PASSword")
+        self.client.login(username="test_user", password="PASSword")
 
     def test_edit_profile_page_loads(self):
-        response = self.client.get(reverse('accounts:edit_profile'))
+        response = self.client.get(reverse("accounts:edit_profile"))
         self.assertEqual(response.status_code, 200)
 
     def test_edit_profile_success(self):
         response = self.client.post(
-            reverse('accounts:edit_profile'),
-            {
-                'display_name': 'New Name',
-                'bio': 'Updated bio'
-            }
+            reverse("accounts:edit_profile"),
+            {"display_name": "New Name", "bio": "Updated bio"},
         )
         self.user.profile.refresh_from_db()
-        self.assertEqual(self.user.profile.display_name, 'New Name')
-        self.assertEqual(self.user.profile.bio, 'Updated bio')
-        self.assertRedirects(response, reverse('accounts:profile', args=['test_user']))
+        self.assertEqual(self.user.profile.display_name, "New Name")
+        self.assertEqual(self.user.profile.bio, "Updated bio")
+        self.assertRedirects(response, reverse("accounts:profile", args=["test_user"]))
+
 
 # TODO move integration test
 class ProfileTests(TestCase):

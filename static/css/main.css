@@ -24,8 +24,8 @@ body {
 .logo {
   display: flex;
   justify-content: left;
-  gap: 20px;
-  margin: 20px;
+  margin-left: 20px;
+  margin-top: 10px;
 }
 
 
@@ -71,6 +71,10 @@ img {
 }
 
 
+
+
+
+
 /* typography */
 
 h1, h2, h3 {
@@ -114,25 +118,16 @@ a:active {
 
 /* Projects Feed */
 
-.card {
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 6px;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  
+.project-card {
+    border: 1px solid #ddd;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 8px;
 }
 
-.card-title {
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin-bottom: 0.25rem;
-}
-
-.card-meta {
-  font-size: 0.85rem;
-  color: #6b7280;
-  margin-bottom: 0.5rem;
+.project-card img {
+    max-width: 100%;
+    border-radius: 4px;
 }
 
 
