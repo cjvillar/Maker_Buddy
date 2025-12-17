@@ -17,6 +17,10 @@ pip install -r requirments.txt
 python manage.py check
 python manage.py runserver
 ```
+### Create Media dir
+```bash
+mkdir media/profile_pics
+```
 
 ### Make Migrations
 ```bash
