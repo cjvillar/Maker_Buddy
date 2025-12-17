@@ -1,5 +1,13 @@
 from django.urls import path
-from .views import create_project, project_detail, edit_project, delete_project
+from .views import (
+    create_project,
+    project_detail,
+    edit_project,
+    delete_project,
+    create_checkpoint,
+    edit_checkpoint,
+    delete_checkpoint,
+)
 
 app_name = "maker_projects"
 
@@ -9,4 +17,19 @@ urlpatterns = [
     path("<int:pk>/edit/", edit_project, name="edit"),
     path("<int:pk>/delete/", delete_project, name="delete"),
     path("<int:pk>/", project_detail, name="detail"),
+    path(
+        "<int:project_pk>/checkpoints/create/",
+        create_checkpoint,
+        name="checkpoint_create",
+    ),
+    path(
+        "checkpoints/<int:pk>/checkpoints/edit/",
+        edit_checkpoint,
+        name="checkpoint_edit",
+    ),
+    path(
+        "checkpoints/<int:pk>/checkpoints/delete/",
+        delete_checkpoint,
+        name="checkpoint_delete",
+    ),
 ]

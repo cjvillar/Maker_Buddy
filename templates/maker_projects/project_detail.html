@@ -37,5 +37,39 @@
   <a href="{% url 'maker_projects:delete' project.pk %}">Delete</a>
 {% endif %}
 
+<section class="checkpoints">
+  <h2>Checkpoints</h2>
+
+  <ul>
+    {% for checkpoint in project.checkpoints.all %}
+      <li>
+        <div class="checkpoint {% if checkpoint.is_complete %}done{% endif %}">
+          <strong>{{ checkpoint.title }}</strong>
+          <p>{{ checkpoint.description }}</p>
+
+          {% if user == project.owner %}
+            <a href="{% url 'maker_projects:checkpoint_edit' checkpoint.pk %}">
+              Edit
+            </a>
+            |
+            <a href="{% url 'maker_projects:checkpoint_delete' checkpoint.pk %}">
+              Delete
+            </a>
+          {% endif %}
+        </div>
+      </li>
+    {% empty %}
+      <li>No checkpoints yet.</li>
+    {% endfor %}
+  </ul>
+
+  {% if user == project.owner %}
+    <a href="{% url 'maker_projects:checkpoint_create' project.pk %}">
+      + Add Checkpoint
+    </a>
+  {% endif %}
+</section>
+
+
 </article>
 {% endblock %}

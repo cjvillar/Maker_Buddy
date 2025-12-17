@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<form method="post">
+    <h2>Delete Checkpoint</h2>
+
+<p>Are you sure you want to delete "{{ checkpoint.title }}"?</p>
+    {% csrf_token %}
+    <button type="submit">Delete</button>
+    <a href="{% url 'maker_projects:detail' checkpoint.project.pk %}">Cancel</a>
+</form>
+{% endblock %}
