@@ -13,8 +13,8 @@
   <p class="project-date">
     Created {{ project.created_at|date:"F j, Y" }}
   </p>
-  <p class="project-date">
-    {{ project.get_status_display }}
+  <p class="badge {{ project.status|lower }}">
+    Status: {{ project.status }}
   </p>
   
 
@@ -23,7 +23,7 @@
   {% endif %}
 
   <section class="project-description">
-    <h3>Description</h3>
+    <h3>Description: </h3>
     <p>{{ project.description }}</p>
   </section>
 
@@ -34,14 +34,10 @@
   </section>
   {% endif %}
 
-  {% if user == project.owner %}
-  <a href="{% url 'maker_projects:edit' project.pk %}">Edit</a> |
-  <a href="{% url 'maker_projects:delete' project.pk %}">Delete</a>
-  <a href="{% url 'maker_projects:confirm_complete' project.pk %}">Complete</a>
-  {% endif %}
 
+<br></br>
   <section class="checkpoints">
-    <h3>Checkpoints</h3>
+    <h3>Checkpoints: </h3>
 
     <ul>
       {% for checkpoint in project.checkpoints.all %}
@@ -79,7 +75,11 @@
     </a>
     {% endif %}
   </section>
-
-
+<br></br>
+  {% if user == project.owner %}
+  <a href="{% url 'maker_projects:edit' project.pk %}">Edit</a> |
+  <a href="{% url 'maker_projects:delete' project.pk %}">Delete</a> |
+  <a href="{% url 'maker_projects:confirm_complete' project.pk %}">Complete</a>
+  {% endif %}
 </article>
 {% endblock %}

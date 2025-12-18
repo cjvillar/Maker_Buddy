@@ -20,9 +20,9 @@
     {% for project in projects %}
         <!-- TODO: add logic to get current pproject -->
         <strong><a href="{% url 'maker_projects:detail' project.pk %}">
-        {{ project.title }}
+        {{ project.title }} : 
       </a></strong>
-        {{ project.description|truncatewords:20 }}
+        {{ project.description |truncatechars:20 }}
     {% endfor %}
   </ul>
 {% else %}

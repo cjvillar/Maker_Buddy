@@ -10,7 +10,7 @@
   {% for project in projects %}
   <article class="project-card">
     <h2><a href="{% url 'maker_projects:detail' project.pk %}">
-        {{ project.title }}
+        {{ project.title }}:{{ project.status }}
       </a></h2>
     <p>
       by
