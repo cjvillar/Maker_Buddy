@@ -13,6 +13,10 @@
   <p class="project-date">
     Created {{ project.created_at|date:"F j, Y" }}
   </p>
+  <p class="project-date">
+    {{ project.get_status_display }}
+  </p>
+  
 
   {% if project.image %}
   <img src="{{ project.image.url }}" alt="{{ project.title }}">

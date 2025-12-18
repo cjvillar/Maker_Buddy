@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from django.urls import reverse
 from maker_projects.models import MakerProject
+from django.db import IntegrityError
 
 
 class CreateProjectTests(TestCase):
@@ -18,10 +19,26 @@ class CreateProjectTests(TestCase):
                 "code_snippet": "print('hi')",
             },
         )
-
         self.assertEqual(response.status_code, 302)
         self.assertTrue(MakerProject.objects.filter(title="My First Project").exists())
 
+    def test_one_active_project(self):
+      
+        MakerProject.objects.create(
+        owner=self.user,
+        title="First",
+        description="Desc",
+        status=MakerProject.Status.ACTIVE,
+    )
+
+
+        with self.assertRaises(IntegrityError):
+            MakerProject.objects.create(
+                owner=self.user,
+                title="Second",
+                description="Desc",
+                status=MakerProject.Status.ACTIVE,
+            )
 
 class DeleteProjectTests(TestCase):
     def setUp(self):

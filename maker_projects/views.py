@@ -6,12 +6,25 @@ from .forms import MakerProjectForm, CheckPointForm
 
 @login_required
 def create_project(request):
+    has_active = MakerProject.objects.filter(
+        owner=request.user,
+        status=MakerProject.Status.ACTIVE,
+    ).exists()
+
+    
+    if request.method == "POST" and has_active:
+        # temlpate informs user of active project
+        return redirect("accounts:profile", request.user.username)
+
     if request.method == "POST":
         form = MakerProjectForm(request.POST, request.FILES)
         if form.is_valid():
             project = form.save(commit=False)
             project.owner = request.user
+            project.status = MakerProject.Status.ACTIVE
+
             project.save()
+
             return redirect("accounts:profile", request.user.username)
     else:
         form = MakerProjectForm()
@@ -19,7 +32,7 @@ def create_project(request):
     return render(
         request,
         "maker_projects/create_project.html",
-        {"form": form},
+        {"form": form, "has_active_project": has_active},
     )
 
 
@@ -55,6 +68,28 @@ def delete_project(request, pk):
         "maker_projects/confirm_delete.html",
         {"project": project},
     )
+
+
+@login_required
+def complete_project(request, pk):
+    project = get_object_or_404(MakerProject, pk=pk, owner=request.user)
+
+    project.status = MakerProject.Status.COMPLETED
+    project.current_project = False
+    project.save()
+
+    return redirect("maker_projects:detail", pk=project.pk)
+
+
+@login_required
+def archive_project(request, pk):
+    project = get_object_or_404(MakerProject, pk=pk, owner=request.user)
+
+    project.status = MakerProject.Status.ARCHIVED
+    project.current_project = False
+    project.save()
+
+    return redirect("accounts:profile", request.user.username)
 
 
 def project_detail(request, pk):
@@ -94,7 +129,7 @@ def create_checkpoint(request, project_pk):
 @login_required
 def edit_checkpoint(request, pk):
     checkpoint = get_object_or_404(CheckPoint, pk=pk, project__owner=request.user)
-    
+
     if request.method == "POST":
         project_pk = checkpoint.project.pk
         form = CheckPointForm(request.POST, instance=checkpoint)

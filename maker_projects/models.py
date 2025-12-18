@@ -1,16 +1,35 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from django.db.models import Q
 
 class MakerProject(models.Model):
+    class Status(models.TextChoices):
+        ACTIVE = "active", "Active"
+        COMPLETED = "completed", "Completed"
+        ARCHIVED = "archived", "Archived"
+
     owner = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="maker_projects"
     )
+
     title = models.CharField(max_length=200)
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     code_snippet = models.TextField(blank=True)
     image = models.ImageField(upload_to="project_images/", blank=True)
+
+    status = models.CharField(
+        max_length=20, choices=Status.choices, default=Status.ACTIVE
+    )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["owner"],
+                condition=Q(status="active"),
+                name="one_active_project_per_user",
+            ),
+        ]
 
     def __str__(self):
         return self.title
