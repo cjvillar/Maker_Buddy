@@ -6,7 +6,6 @@ class MakerProject(models.Model):
     class Status(models.TextChoices):
         ACTIVE = "active", "Active"
         COMPLETED = "completed", "Completed"
-        ARCHIVED = "archived", "Archived"
 
     owner = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="maker_projects"

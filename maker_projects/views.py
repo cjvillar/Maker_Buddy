@@ -11,7 +11,6 @@ def create_project(request):
         status=MakerProject.Status.ACTIVE,
     ).exists()
 
-    
     if request.method == "POST" and has_active:
         # temlpate informs user of active project
         return redirect("accounts:profile", request.user.username)
@@ -74,22 +73,12 @@ def delete_project(request, pk):
 def complete_project(request, pk):
     project = get_object_or_404(MakerProject, pk=pk, owner=request.user)
 
-    project.status = MakerProject.Status.COMPLETED
-    project.current_project = False
-    project.save()
-
-    return redirect("maker_projects:detail", pk=project.pk)
-
-
-@login_required
-def archive_project(request, pk):
-    project = get_object_or_404(MakerProject, pk=pk, owner=request.user)
-
-    project.status = MakerProject.Status.ARCHIVED
-    project.current_project = False
-    project.save()
-
-    return redirect("accounts:profile", request.user.username)
+    if request.method == "POST":
+        project.status = MakerProject.Status.COMPLETED
+        project.save()
+        return redirect("maker_projects:detail", pk=project.pk)
+    
+    return render(request, "maker_projects/confirm_complete.html", {"project": project})
 
 
 def project_detail(request, pk):

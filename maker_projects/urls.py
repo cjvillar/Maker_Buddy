@@ -7,6 +7,7 @@ from .views import (
     create_checkpoint,
     edit_checkpoint,
     delete_checkpoint,
+    complete_project,
 )
 
 app_name = "maker_projects"
@@ -16,6 +17,7 @@ urlpatterns = [
     path("create/", create_project, name="create"),
     path("<int:pk>/edit/", edit_project, name="edit"),
     path("<int:pk>/delete/", delete_project, name="delete"),
+    path("<int:pk>/confirm_complete/", complete_project, name="confirm_complete"),
     path("<int:pk>/", project_detail, name="detail"),
     path(
         "<int:project_pk>/checkpoints/create/",
