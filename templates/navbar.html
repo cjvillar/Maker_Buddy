@@ -1,19 +1,21 @@
 {% block content %}
 
 <nav class="nav">
-    <a href="{% url 'public_feed:home' %}">Feed</a>
-    {% if user.is_authenticated %}
-    <a href="{% url 'accounts:profile' user.username %}">Profile</a>
-    <a href="{% url 'maker_projects:create' %}">New Project</a>
-    <a href="{% url 'accounts:edit_profile' %}">Edit Profile</a>
-    <form method="post" action="{% url 'logout' %}">
-      {% csrf_token %}
-      <button type="submit">Logout</button>
-    </form>
+  <a href="{% url 'public_feed:home' %}">Feed</a>
+  {% if user.is_authenticated %}
+  <a href="{% url 'accounts:profile' user.username %}">Profile</a>
+  <a href="{% url 'maker_projects:create' %}">New Project</a>
+  <a href="{% url 'accounts:edit_profile' %}">Edit Profile</a>
+  <form method="post" action="{% url 'logout' %}" style="display:none;">
+    {% csrf_token %}
+  </form>
+  <a href="#" onclick="document.getElementById('logout-form').submit(); return false;">
+    Logout
+  </a>
 
-    {% else %}
-    <a href="{% url 'login' %}">Login</a>
-    <a href="{% url 'accounts:signup' %}">Sign Up</a>
-    {% endif %}
-  </nav>
+  {% else %}
+  <a href="{% url 'login' %}">Login</a>
+  <a href="{% url 'accounts:signup' %}">Sign Up</a>
+  {% endif %}
+</nav>
 {% endblock %}
