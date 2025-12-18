@@ -2,7 +2,8 @@
 {% block content %}
 {% load static %}
 
-<div class=".container">
+
+<article class="project-card">
 {% if profile_user.profile.profile_pic %}
   <img src="{{ profile_user.profile.profile_pic.url }}">
 {% else %}
@@ -14,17 +15,19 @@
 <div class=".bio"><p>{{ profile_user.profile.bio }}</p></div>
 
 {% if projects %}
-  <h2>Projects</h2>
+  <h2>Current Project: </h2>
   <ul>
     {% for project in projects %}
-      <li>
-        <strong>{{ project.title }}</strong><br>
+        <!-- TODO: add logic to get current pproject -->
+        <strong><a href="{% url 'maker_projects:detail' project.pk %}">
+        {{ project.title }}
+      </a></strong>
         {{ project.description|truncatewords:20 }}
-      </li>
     {% endfor %}
   </ul>
 {% else %}
   <p>No projects yet.</p>
 {% endif %}
-</div>
+
+</article>
 {% endblock %}

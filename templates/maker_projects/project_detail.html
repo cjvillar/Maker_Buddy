@@ -1,12 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-<article class="project-detail">
-
+<article class="project-card">
   <h1>{{ project.title }}</h1>
-
   <p>
-    by
+    Maker:
     <a href="{% url 'accounts:profile' project.owner.username %}">
       {{ project.owner.profile.display_name|default:project.owner.username }}
     </a>
@@ -17,37 +15,42 @@
   </p>
 
   {% if project.image %}
-    <img src="{{ project.image.url }}" alt="{{ project.title }}">
+  <img src="{{ project.image.url }}" alt="{{ project.title }}">
   {% endif %}
 
   <section class="project-description">
-    <h2>Description</h2>
+    <h3>Description</h3>
     <p>{{ project.description }}</p>
   </section>
 
   {% if project.code_snipet %}
-    <section class="project-code">
-      <h2>Code</h2>
-      <pre><code>{{ project.code_snippet }}</code></pre>
-    </section>
+  <section class="project-code">
+    <h2>Code</h2>
+    <pre><code>{{ project.code_snippet }}</code></pre>
+  </section>
   {% endif %}
 
- {% if user == project.owner %}
+  {% if user == project.owner %}
   <a href="{% url 'maker_projects:edit' project.pk %}">Edit</a> |
   <a href="{% url 'maker_projects:delete' project.pk %}">Delete</a>
-{% endif %}
+  {% endif %}
 
-<section class="checkpoints">
-  <h2>Checkpoints</h2>
+  <section class="checkpoints">
+    <h3>Checkpoints</h3>
 
-  <ul>
-    {% for checkpoint in project.checkpoints.all %}
+    <ul>
+      {% for checkpoint in project.checkpoints.all %}
       <li>
-        <div class="checkpoint {% if checkpoint.is_complete %}done{% endif %}">
+        <div class="checkpoint {% if checkpoint.is_complete %}done{% endif %}" id="checkpoint-{{ checkpoint.id }}">
+
+          <input type="checkbox" class="checkpoint-toggle" data-id="{{ checkpoint.id }}">
+          {% if checkpoint.is_complete%}checked{% endif %} </input>
+
           <strong>{{ checkpoint.title }}</strong>
           <p>{{ checkpoint.description }}</p>
 
           {% if user == project.owner %}
+          <div class="checkpoint-actions">
             <a href="{% url 'maker_projects:checkpoint_edit' checkpoint.pk %}">
               Edit
             </a>
@@ -55,20 +58,22 @@
             <a href="{% url 'maker_projects:checkpoint_delete' checkpoint.pk %}">
               Delete
             </a>
-          {% endif %}
+            {% endif %}
+          </div>
+        </div>
         </div>
       </li>
-    {% empty %}
+      {% empty %}
       <li>No checkpoints yet.</li>
-    {% endfor %}
-  </ul>
+      {% endfor %}
+    </ul>
 
-  {% if user == project.owner %}
+    {% if user == project.owner %}
     <a href="{% url 'maker_projects:checkpoint_create' project.pk %}">
       + Add Checkpoint
     </a>
-  {% endif %}
-</section>
+    {% endif %}
+  </section>
 
 
 </article>

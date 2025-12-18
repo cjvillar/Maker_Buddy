@@ -4,9 +4,9 @@
 
 
 {% block content %}
-<div class=".container">
-  <h1>Maker Projects</h1>
 
+<div class=".container">
+  <h2>Maker Projects</h2>
   {% for project in projects %}
   <article class="project-card">
     <h2><a href="{% url 'maker_projects:detail' project.pk %}">
