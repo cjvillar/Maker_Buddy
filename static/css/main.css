@@ -47,22 +47,19 @@ body {
 
 /* Layout  */
 .container {
-  width: 100%;
-  max-width: 650px;
+  width: 52%;
+  margin: auto;
+  height: 52%;
+  border: var(--bg-card);
   padding: 0 1.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+  
 }
 
 
-header {
-  width: 100%;
-  background: var(--bg-body);
-  border-bottom: 4px solid;
-  padding: 2rem 0;
-}
 
 
 main {
@@ -156,9 +153,9 @@ a:hover {
 }
 
 .project-card img {
-  width: 100%;
-  border-radius: var(--radius-sm);
-  margin-bottom: 1.5rem;
+  width: 52%;
+  margin: 1.5rem;
+  border-radius: var(--radius-md);
 }
 
 .project-date {

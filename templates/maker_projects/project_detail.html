@@ -17,17 +17,17 @@
     Status: {{ project.status }}
   </p>
   
-
+<div>
   {% if project.image %}
   <img src="{{ project.image.url }}" alt="{{ project.title }}">
   {% endif %}
-
+</div>
   <section class="project-description">
     <h3>Description: </h3>
     <p>{{ project.description }}</p>
   </section>
 
-  {% if project.code_snipet %}
+  {% if project.code_snippet %}
   <section class="project-code">
     <h2>Code</h2>
     <pre><code>{{ project.code_snippet }}</code></pre>
