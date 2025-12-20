@@ -5,6 +5,9 @@ from maker_projects.models import MakerProject, CheckPoint
 import random
 
 
+NUMBER_PROJECTS = 1
+NUMBER_USERS = 5
+
 class Command(BaseCommand):
     help = "Seed or Delete test data: python manage.py seed_data <--delete>"
 
@@ -26,7 +29,7 @@ class Command(BaseCommand):
 
         users = []
 
-        for i in range(5):
+        for i in range(NUMBER_USERS):
             username = f"user{i}"
             user, created = User.objects.get_or_create(
                 username=username, defaults={"email": f"{username}@example.com"}
@@ -47,7 +50,7 @@ class Command(BaseCommand):
             users.append(user)
 
         for user in users:
-            for j in range(3):
+            for j in range(NUMBER_PROJECTS):
                 project = MakerProject.objects.create(
                     owner=user,
                     title=f"{user.username}'s Project {j}",

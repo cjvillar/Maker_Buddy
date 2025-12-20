@@ -41,3 +41,22 @@ I use python Black formatter:
 ```bash
  python -m black .
 ```
+
+
+### django shell
+```bash
+python manage.py shell # start shell
+
+#example importing model and queries
+from django.contrib.auth.models import User
+from maker_projects.models import MakerProject
+
+MakerProject.objects.all()
+MakerProject.objects.count()
+MakerProject.objects.first()  #last(), 
+project = MakerProject.objects.get(id=1)
+MakerProject.objects.get(title="<project_title>")
+user = User.objects.get(username="chris")
+user.maker_projects.all()
+MakerProject.objects.values("title", "code_snippet")
+```
