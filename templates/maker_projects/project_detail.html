@@ -82,5 +82,16 @@
   <a href="{% url 'maker_projects:delete' project.pk %}">Delete</a> |
   <a href="{% url 'maker_projects:confirm_complete' project.pk %}">Complete</a>
   {% endif %}
+
+ <br></br>
+
+ <form action="{% url 'maker_projects:project_like' project.pk %}" method="post">
+  {% csrf_token %}
+  <button type="submit">
+    LIKES {{ project.likes.count }}
+  </button>
+</form>
+
+
 </article>
 {% endblock %}

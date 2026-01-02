@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
 from django.urls import reverse
-from maker_projects.models import MakerProject
+from maker_projects.models import MakerProject, ProjectLike
 from django.db import IntegrityError
 
 
@@ -23,14 +23,13 @@ class CreateProjectTests(TestCase):
         self.assertTrue(MakerProject.objects.filter(title="My First Project").exists())
 
     def test_one_active_project(self):
-      
-        MakerProject.objects.create(
-        owner=self.user,
-        title="First",
-        description="Desc",
-        status=MakerProject.Status.ACTIVE,
-    )
 
+        MakerProject.objects.create(
+            owner=self.user,
+            title="First",
+            description="Desc",
+            status=MakerProject.Status.ACTIVE,
+        )
 
         with self.assertRaises(IntegrityError):
             MakerProject.objects.create(
@@ -39,6 +38,7 @@ class CreateProjectTests(TestCase):
                 description="Desc",
                 status=MakerProject.Status.ACTIVE,
             )
+
 
 class DeleteProjectTests(TestCase):
     def setUp(self):
@@ -67,7 +67,16 @@ class ProjectDetailTests(TestCase):
             description="Test description",
         )
 
+        ProjectLike.objects.create(user=user, project=project)
+
+        self.client.login(
+            username="test_user",
+            password="pass"
+        )
+
+
         response = self.client.get(reverse("maker_projects:detail", args=[project.pk]))
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Test Project")
+        self.assertContains(response, "LIKES 1")

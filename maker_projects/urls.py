@@ -8,6 +8,7 @@ from .views import (
     edit_checkpoint,
     delete_checkpoint,
     complete_project,
+    toggle_like,
 )
 
 app_name = "maker_projects"
@@ -34,4 +35,5 @@ urlpatterns = [
         delete_checkpoint,
         name="checkpoint_delete",
     ),
+    path("projects/<int:pk>/like/", toggle_like, name="project_like"),
 ]

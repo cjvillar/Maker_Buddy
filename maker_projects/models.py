@@ -65,3 +65,12 @@ class CheckPoint(models.Model):
 
     def __str__(self):
         return f"{self.project.title} – {self.title}"
+
+
+#NOTE: might not keep, just test for now
+class ProjectLike(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="project_likes")
+    project = models.ForeignKey(MakerProject, on_delete=models.CASCADE,related_name="likes")
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=["user","project"],name="unique_user_project_like",)]

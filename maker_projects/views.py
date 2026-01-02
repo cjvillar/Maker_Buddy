@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import MakerProject, CheckPoint
+from .models import MakerProject, CheckPoint, ProjectLike
 from .forms import MakerProjectForm, CheckPointForm
 
 
@@ -153,3 +153,15 @@ def delete_checkpoint(request, pk):
         "maker_projects/checkpoints/confirm_delete.html",
         {"checkpoint": checkpoint},
     )
+
+
+
+@login_required
+def toggle_like(request,pk):
+    project = get_object_or_404(MakerProject, pk=pk)
+    like, created = ProjectLike.objects.get_or_create(user=request.user, project=project)
+
+    # unlike a project
+    if not created:
+        like.delete()
+    return redirect(request.META.get("HTTP_REFERER", "home"))
