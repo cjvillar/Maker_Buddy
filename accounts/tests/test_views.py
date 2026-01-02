@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
 from accounts.models import UserProfile
-from maker_projects.models import Project
+from maker_projects.models import MakerProject
 from django.urls import reverse
 
 
@@ -45,7 +45,7 @@ class ProfileTests(TestCase):
     def test_profile_projects(self):
         user = User.objects.create_user(username="test_user", password="password123")
 
-        Project.objects.create(owner=user, title="Test Project", description="Desc")
+        MakerProject.objects.create(owner=user, title="Test Project", description="Desc")
 
         response = self.client.get(reverse("accounts:profile", args=["test_user"]))
 
