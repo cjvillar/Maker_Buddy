@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "accounts.apps.AccountsConfig",
     "maker_projects",
     "public_feed",
+    "awards",
 ]
 
 MIDDLEWARE = [
