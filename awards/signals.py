@@ -5,7 +5,8 @@ from .services import evaluate_awards
 from .registry import PROJECT_AWARDS
 
 
-# auto call services.py 
+# auto call services.py
+
 
 @receiver(post_save, sender=MakerProject)
 def trigger_project_awards(sender, instance, **kwargs):

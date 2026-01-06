@@ -69,11 +69,7 @@ class ProjectDetailTests(TestCase):
 
         ProjectLike.objects.create(user=user, project=project)
 
-        self.client.login(
-            username="test_user",
-            password="pass"
-        )
-
+        self.client.login(username="test_user", password="pass")
 
         response = self.client.get(reverse("maker_projects:detail", args=[project.pk]))
 

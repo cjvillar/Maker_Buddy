@@ -4,30 +4,45 @@
 
 
 <article class="project-card">
-{% if profile_user.profile.profile_pic %}
+  {% if profile_user.profile.profile_pic %}
   <img src="{{ profile_user.profile.profile_pic.url }}">
-{% else %}
-  <img src="{% static 'images/default_profile.png' %}" 
-       alt="Default profile">
-{% endif %}
-<h1>{{ profile_user.profile.display_name}}</h1>
+  {% else %}
+  <img src="{% static 'images/default_profile.png' %}" alt="Default profile">
+  {% endif %}
+  <h1>{{ profile_user.profile.display_name}}</h1>
 
-<div class="bio"><p>{{ profile_user.profile.bio }}</p></div>
+  <div class="bio">
+    <p>{{ profile_user.profile.bio }}</p>
+    <br><br>
 
-{% if projects %}
+    <h2>Awards</h2>
+    <ul>
+      {% for ua in user_awards %}
+      <li>
+        <strong>{{ ua.award.name }}</strong> - {{ ua.award.description }}
+      </li>
+      {% empty %}
+      <li>No awards yet. Keep making!</li>
+      {% endfor %}
+    </ul>
+
+
+  </div>
+
+  {% if projects %}
   <h2>Current Project: </h2>
   <ul>
     {% for project in projects %}
-        <!-- TODO: add logic to get current pproject -->
-        <strong><a href="{% url 'maker_projects:detail' project.pk %}">
-        {{ project.title }} : 
+    <!-- TODO: add logic to get current pproject -->
+    <strong><a href="{% url 'maker_projects:detail' project.pk %}">
+        {{ project.title }} :
       </a></strong>
-        {{ project.description |truncatechars:20 }}
+    {{ project.description |truncatechars:20 }}
     {% endfor %}
   </ul>
-{% else %}
+  {% else %}
   <p>No projects yet.</p>
-{% endif %}
+  {% endif %}
 
 </article>
 {% endblock %}

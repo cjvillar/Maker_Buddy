@@ -1,14 +1,14 @@
+# checks if user or project can get the award: True False
 
-#checks if user or project can get the award: True False
 
 class BaseAwardRule:
-    code = None  
-
+    code = None
 
     @classmethod
     def get_project_model(cls):
         # helper to avoid circular imports
         from maker_projects.models import MakerProject
+
         return MakerProject
 
     @classmethod
@@ -29,6 +29,6 @@ class FirstProjectAward(BaseAwardRule):
 
 # award registry
 PROJECT_AWARDS = [FirstProjectAward]
-ACTIVITY_AWARDS = [] # will add user activity awards when I make them up 
+ACTIVITY_AWARDS = []  # will add user activity awards when I make them up
 
 ALL_AWARDS = PROJECT_AWARDS + ACTIVITY_AWARDS

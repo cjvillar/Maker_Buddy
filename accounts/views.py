@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from .forms import UserProfileForm
+from awards.models import UserAward
 
 
 def signup(request):
@@ -19,6 +20,9 @@ def signup(request):
 
 def user_profile(request, username):
     profile_user = get_object_or_404(User, username=username)
+    user_awards = (
+        profile_user.awards.select_related("award").all().order_by("-awarded_at")
+    )
 
     projects = profile_user.maker_projects.select_related("owner").order_by(
         "-created_at"
@@ -30,6 +34,7 @@ def user_profile(request, username):
         {
             "profile_user": profile_user,
             "projects": projects,
+            "user_awards": user_awards,
         },
     )
 

@@ -8,6 +8,7 @@ import random
 NUMBER_PROJECTS = 1
 NUMBER_USERS = 5
 
+
 class Command(BaseCommand):
     help = "Seed or Delete test data: python manage.py seed_data <--delete>"
 

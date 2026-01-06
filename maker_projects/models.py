@@ -3,6 +3,7 @@ from django.db.models import Q
 from django.utils import timezone
 from django.contrib.auth.models import User
 
+
 class MakerProject(models.Model):
     class Status(models.TextChoices):
         ACTIVE = "active", "Active"
@@ -32,14 +33,12 @@ class MakerProject(models.Model):
             ),
         ]
 
-        
     def is_overdue(self):
         return (
             self.due_date
             and self.status != self.Status.COMPLETED
             and self.due_date < timezone.now().date()
         )
-
 
     def days_remaining(self):
         if not self.due_date:
@@ -67,10 +66,19 @@ class CheckPoint(models.Model):
         return f"{self.project.title} – {self.title}"
 
 
-#NOTE: might not keep, just test for now
+# NOTE: might not keep, just test for now
 class ProjectLike(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="project_likes")
-    project = models.ForeignKey(MakerProject, on_delete=models.CASCADE,related_name="likes")
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="project_likes"
+    )
+    project = models.ForeignKey(
+        MakerProject, on_delete=models.CASCADE, related_name="likes"
+    )
 
     class Meta:
-        constraints = [models.UniqueConstraint(fields=["user","project"],name="unique_user_project_like",)]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "project"],
+                name="unique_user_project_like",
+            )
+        ]

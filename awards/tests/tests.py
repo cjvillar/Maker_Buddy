@@ -7,6 +7,7 @@ from maker_projects.models import MakerProject
 
 User = get_user_model()
 
+
 class AwardsRuleTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
