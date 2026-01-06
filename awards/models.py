@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
+
 class Award(models.Model):
     code = models.CharField(max_length=50, unique=True)
     name = models.CharField(max_length=100)
@@ -14,12 +15,8 @@ class Award(models.Model):
 
 
 class UserAward(models.Model):
-    user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="awards"
-    )
-    award = models.ForeignKey(
-        Award, on_delete=models.CASCADE
-    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="awards")
+    award = models.ForeignKey(Award, on_delete=models.CASCADE)
     awarded_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

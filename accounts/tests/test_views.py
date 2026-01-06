@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from accounts.models import UserProfile
 from maker_projects.models import MakerProject
+from awards.models import Award, UserAward
 from django.urls import reverse
 
 
@@ -42,12 +43,29 @@ class ProfileEditTests(TestCase):
 
 # TODO move integration test
 class ProfileTests(TestCase):
-    def test_profile_projects(self):
-        user = User.objects.create_user(username="test_user", password="password123")
 
-        MakerProject.objects.create(owner=user, title="Test Project", description="Desc")
+    def setUp(self):
+        self.user = User.objects.create_user(username="test_user", password="PASSword")
+
+    def test_profile_projects(self):
+        MakerProject.objects.create(
+            owner=self.user, title="Test Project", description="Desc"
+        )
 
         response = self.client.get(reverse("accounts:profile", args=["test_user"]))
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Test Project")
+
+    def test_profile_award_view(self):
+        MakerProject.objects.create(
+            owner=self.user,
+            title="Test Project",
+            description="Desc",
+            status="completed",
+        )
+        response = self.client.get(reverse("accounts:profile", args=["test_user"]))
+
+        user_awards = response.context["user_awards"]
+        self.assertEqual(user_awards.count(), 1)
+        self.assertEqual(user_awards[0].award.name, "Completed First Project")

@@ -77,7 +77,7 @@ def complete_project(request, pk):
         project.status = MakerProject.Status.COMPLETED
         project.save()
         return redirect("maker_projects:detail", pk=project.pk)
-    
+
     return render(request, "maker_projects/confirm_complete.html", {"project": project})
 
 
@@ -155,11 +155,12 @@ def delete_checkpoint(request, pk):
     )
 
 
-
 @login_required
-def toggle_like(request,pk):
+def toggle_like(request, pk):
     project = get_object_or_404(MakerProject, pk=pk)
-    like, created = ProjectLike.objects.get_or_create(user=request.user, project=project)
+    like, created = ProjectLike.objects.get_or_create(
+        user=request.user, project=project
+    )
 
     # unlike a project
     if not created:
