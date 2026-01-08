@@ -56,7 +56,7 @@ body {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  
+
 }
 
 
@@ -95,6 +95,30 @@ main {
   font-weight: 500;
   color: var(--text-muted);
   font-size: 0.95rem;
+}
+
+ /*NAV BAR LOGOUT BUTTON: this stying helps it look like other a tags */
+.hidden-form {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  font: inherit;
+  box-shadow: none;
+  font-weight: 500;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.nav-link-button {
+  background: none;
+  text-decoration: underline;
+  border: none;
+  padding: 0;
+  color: var(--text-muted);
+  cursor: pointer;
+  font: inherit;
 }
 
 

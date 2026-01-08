@@ -5,12 +5,13 @@
   <a href="{% url 'accounts:profile' user.username %}">Profile</a>
   <a href="{% url 'maker_projects:create' %}">New Project</a>
   <a href="{% url 'accounts:edit_profile' %}">Edit Profile</a>
-  <form id="logout-form" method="post" action="{% url 'logout' %}" style="display:none;">
+
+
+  <form id="logout-form" method="post" action="{% url 'logout' %}" class="hidden-form">
     {% csrf_token %}
+    <button type="submit" class="nav-link-button">Logout</button>
   </form>
-  <a href="#" onclick="document.getElementById('logout-form').submit(); return false;">
-    Logout
-  </a>
+
 
   {% else %}
   <a href="{% url 'login' %}">Login</a>
