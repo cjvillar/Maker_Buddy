@@ -2,9 +2,23 @@
 
 {% block content %}
 <form method="post" enctype="multipart/form-data">
-    <h1>Edit Project</h1>
+    <h1>Edit Project:</h1>
     {% csrf_token %}
     {{ form.as_p }}
+    <h3>Project Links (Edit, Add, or Delete):</h3>
+    {{ link_formset.management_form }}
+    {% for link in link_formset %}
+    <div class="link-form">
+        {{ link.url.errors }}
+        {{ link.url }}
+
+        {% if link.instance.pk %}
+        <label>
+            {{ link.DELETE }} Delete
+        </label>
+        {% endif %}
+    </div>
+    {% endfor %}
     <button type="submit">Save</button>
 </form>
 {% endblock %}

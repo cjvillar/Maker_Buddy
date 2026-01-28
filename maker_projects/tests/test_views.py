@@ -1,8 +1,9 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
 from django.urls import reverse
-from maker_projects.models import MakerProject, ProjectLike
+from maker_projects.models import MakerProject, ProjectLike, ProjectLink
 from django.db import IntegrityError
+from maker_projects.forms import ProjectLinkForm
 
 
 class CreateProjectTests(TestCase):
@@ -16,7 +17,6 @@ class CreateProjectTests(TestCase):
             {
                 "title": "My First Project",
                 "description": "Hello world",
-                "code_snippet": "print('hi')",
             },
         )
         self.assertEqual(response.status_code, 302)
@@ -48,7 +48,6 @@ class DeleteProjectTests(TestCase):
             owner=self.user,
             title="My NEW Project",
             description="Some mistake to edit",
-            code_snippet="print('BUFFER OVERFLOW')",
         )
 
     def test_owner_edit_project(self):

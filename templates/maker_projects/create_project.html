@@ -8,6 +8,8 @@
     {% else %}
     <h1>Start a Project</h1>
     {{ form.as_p }}
+    <h3>Add project repo link (optional)</h3>
+    {{ link_form.as_p }}
     <button type="submit">Create</button>
     {% endif %}
 </form>
