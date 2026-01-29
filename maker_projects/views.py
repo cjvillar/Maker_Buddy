@@ -1,7 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import MakerProject, CheckPoint, ProjectLike
-from .forms import MakerProjectForm, CheckPointForm
+from .forms import MakerProjectForm, CheckPointForm, ProjectLinkForm, ProjectLink
+from django.forms import inlineformset_factory
 
 
 @login_required
@@ -17,6 +18,7 @@ def create_project(request):
 
     if request.method == "POST":
         form = MakerProjectForm(request.POST, request.FILES)
+        link_form = ProjectLinkForm(request.POST)
         if form.is_valid():
             project = form.save(commit=False)
             project.owner = request.user
@@ -24,14 +26,21 @@ def create_project(request):
 
             project.save()
 
+            # optional links
+            if link_form.is_valid() and link_form.cleaned_data:
+                link = link_form.save(commit=False)
+                link.project = project
+                link.save()
+
             return redirect("accounts:profile", request.user.username)
     else:
         form = MakerProjectForm()
+        link_form = ProjectLinkForm()
 
     return render(
         request,
         "maker_projects/create_project.html",
-        {"form": form, "has_active_project": has_active},
+        {"form": form, "link_form": link_form, "has_active_project": has_active},
     )
 
 
@@ -39,18 +48,33 @@ def create_project(request):
 def edit_project(request, pk):
     project = get_object_or_404(MakerProject, pk=pk, owner=request.user)
 
+    # https://docs.djangoproject.com/en/6.0/ref/forms/models/
+
+    ProjectLinkFormSet = inlineformset_factory(
+        MakerProject,
+        ProjectLink,
+        form=ProjectLinkForm,
+        extra=1,  # show one empty form for adding a new link
+        can_delete=True,  # enables deleting existing links
+    )
+
     if request.method == "POST":
         form = MakerProjectForm(request.POST, request.FILES, instance=project)
-        if form.is_valid():
+        link_formset = ProjectLinkFormSet(request.POST, instance=project)
+
+        if form.is_valid() and link_formset.is_valid():
             form.save()
+            link_formset.save()
+
             return redirect("maker_projects:detail", pk=project.pk)
     else:
         form = MakerProjectForm(instance=project)
+        link_formset = ProjectLinkFormSet(instance=project)
 
     return render(
         request,
         "maker_projects/edit_project.html",
-        {"form": form, "project": project},
+        {"form": form, "link_formset": link_formset, "project": project},
     )
 
 
@@ -88,6 +112,25 @@ def project_detail(request, pk):
         request,
         "maker_projects/project_detail.html",
         {"project": project},
+    )
+
+
+@login_required
+def add_project_link(request, project_id):
+    project = get_object_or_404(MakerProject, id=project_id, owner=request.user)
+
+    if request.method == "POST":
+        form = ProjectLinkForm(request.POST)
+        if form.is_valid():
+            link = form.save(commit=False)
+            link.project = project
+            link.save()
+            return redirect("maker_projects:detail", project_id=project.id)
+    else:
+        form = ProjectLinkForm()
+
+    return render(
+        request, "maker_projects/add_link.html", {"form": form, "project": project}
     )
 
 
