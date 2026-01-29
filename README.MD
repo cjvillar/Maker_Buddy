@@ -59,6 +59,7 @@ MakerProject.objects.get(title="<project_title>")
 user = User.objects.get(username="chris")
 user.maker_projects.all()
 MakerProject.objects.values("title")
+ProjectLink.objects.filter(link_type="github")
 
 #show model fields:
 [field.name for field in MakerProject._meta.fields]

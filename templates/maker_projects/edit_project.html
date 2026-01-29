@@ -10,8 +10,8 @@
     {% for link in link_formset %}
     <div class="link-form">
         {{ link.url.errors }}
+        {{ link.id }}
         {{ link.url }}
-
         {% if link.instance.pk %}
         <label>
             {{ link.DELETE }} Delete
