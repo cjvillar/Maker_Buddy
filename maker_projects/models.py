@@ -16,15 +16,36 @@ class MakerProject(models.Model):
         User, on_delete=models.CASCADE, related_name="maker_projects"
     )
 
-    title = models.CharField(max_length=200)
+    title = models.CharField(
+        max_length=200, help_text="Give your project a descriptive name."
+    )
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    due_date = models.DateField(null=True, blank=True)
+    due_date = models.DateField(
+        null=True,
+        blank=True,
+        help_text="Set reasonable timeframe to finish your project.",
+    )
 
-    image = models.ImageField(upload_to="project_images/", blank=True)
+    image = models.ImageField(
+        upload_to="project_images/",
+        blank=True,
+        help_text="Please add an image of your hardware.",
+    )
 
     status = models.CharField(
         max_length=20, choices=Status.choices, default=Status.ACTIVE
+    )
+
+    goal = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text="Short, single-sentence goal for the project",
+    )
+
+    definition_of_done = models.TextField(
+        blank=True,
+        help_text="Clear description of when this project is considered complete",
     )
 
     class Meta:

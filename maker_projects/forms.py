@@ -1,12 +1,12 @@
 from django import forms
 
-from .models import MakerProject, CheckPoint,ProjectLink
+from .models import MakerProject, CheckPoint, ProjectLink
 
 
 class MakerProjectForm(forms.ModelForm):
     class Meta:
         model = MakerProject
-        fields = ["title", "description", "due_date", "image"]
+        fields = ["title", "description", "due_date", "image","goal"]
         widgets = {"due_date": forms.SelectDateWidget(attrs={"type": "date"})}
 
 
@@ -26,4 +26,3 @@ class ProjectLinkForm(forms.ModelForm):
         if not url.startswith("https://"):
             raise forms.ValidationError("Links must use HTTPS")
         return url
-    
