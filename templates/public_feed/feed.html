@@ -5,45 +5,42 @@
 
 {% block content %}
 
-<div class="container">
-  <h2>Maker Projects</h2>
+<div class="container-fluid">
+ <h2>Maker Projects</h2>
   {% for project in projects %}
-  <article class="project-card">
-    <h2><a href="{% url 'maker_projects:detail' project.pk %}">
-        {{ project.title }}:{{ project.status }}
+  <div class="card shadow p-3 mb-5 rounded">
+    <h2 class="card-title"><a class="title-link" href="{% url 'maker_projects:detail' project.pk %}">
+        {{ project.title }} :  <small class="text-muted"> {{ project.status }}</small>
       </a></h2>
-    <p>
+    {% if project.image %}
+    <img class="rounded" src="{{ project.image.url }}" alt="{{ project.title }}">
+    {% endif %}
+    <p class="card-text">
       by
-      <a href="{% url 'accounts:profile' project.owner.username %}">
-        {{ project.owner.profile.display_name|default:"Maker" }}
+      <a class="title-link" href="{% url 'accounts:profile' project.owner.username %}">
+        {{ project.owner.profile.display_name| default:"Maker" }}
       </a>
+      <br>
+      {{ project.description|truncatewords:30 }}
     </p>
 
-    <p>{{ project.description|truncatewords:30 }}</p>
-
-    {% if project.image %}
-    <img src="{{ project.image.url }}" alt="{{ project.title }}">
-    {% endif %}
-
-    {% if project.code_snippet %}
-    <pre><code>{{ project.code_snippet }}</code></pre>
-    {% endif %}
-  </article>
+  </div>
   {% empty %}
   <p>No projects yet. Be the first to share!</p>
   {% endfor %}
 
-<div class="pagination">
-  {% if  page_obj.has_previous %}
-    <a href="?page={{  page_obj.previous_page_number  }}">Previous</a>
-  {% endif %}
+  <ul class="pagination">
+    {% if page_obj.has_previous %}
+    <li class="page-item"><a href="?page={{  page_obj.previous_page_number  }}">Previous</a></li>
+    {% endif %}
 
-  <span>Page {{  page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+    <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
 
-  {% if page_obj.has_next %}
-    <a href="?page={{  page_obj.next_page_number  }}">Next</a>
-    <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a
-  {% endif %}
+    {% if page_obj.has_next %}
+    <li class="page-item"> <a href="?page={{  page_obj.next_page_number  }}">Next</a></li>
+    <li class="page-item"><a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a></li>
+    {% endif %}
 
-  {% endblock %}
+    {% endblock %}
+  </ul>
 </div>

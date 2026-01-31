@@ -7,351 +7,140 @@
   padding: 0;
 }
 
+/* Import from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Space+Mono&display=swap');
+
+
 :root {
-  --primary: #C20020;
-  /* Monza Red */
-  --primary-hover: #FF0000;
-  /* Standard Red */
-  --bg-body: #130918;
-  /* Dark Purple */
-  --bg-card: #1c1122;
-  /* Lighter Ebony */
-  --text-main: #ECE2D0;
-  /* Off-white*/
-  --text-muted: #9ca3af;
-  --border-color: #2D2430;
-  /* Muted dark purple border */
 
-  --yellow: #FFD700;
-  --orange: #FF8C00;
-  --red: #FF0000;
-  --cyan: #00FFFF;
-  --green: #00AC5B;
+  --font-header: 'Space Grotesk', sans-serif;
+  --font-body: 'Space Mono', monospace;
 
-  --radius-md: 4px;
-  --radius-sm: 2px;
-  --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 10px 15px rgba(0, 0, 0, 0.5);
+
+  /* The "Command Center" Blue - sophisticated but technical */
+  --primary: #334BCB;
+  --primary-hover: #26389D;
+
+  /* Deep Charcoal with a hint of warm "Bakelite" brown */
+  --bg-body: #161714;
+  --bg-card: #1C1E1B;
+
+  /* Off-whites and Muted Grays for that vintage manual feel */
+  --text-main: #ECE9E0;
+  --text-muted: #8E9185;
+  --border-color: #2D312C;
+
+  /* MCM Hardware Accents - desaturated but vibrant */
+  --green: #4D8B31;
+  /* Vintage machinery green */
+  --yellow: #D9A01B;
+  /* Harvest gold / Brass pulse */
+  --red: #B91C1C;
+  /* Emergency stop button red */
+  --cyan: #56B3B4;
+  /* Retro oscilloscope teal */
+  --orange: #D35400;
+  /* The classic Eames/Herman Miller Orange */
+
+  /* ---- Bootstrap theme variables ---- */
+  --bs-primary: var(--primary);
+  --bs-primary-rgb: 194, 0, 32;
+
+  --bs-body-bg: var(--bg-body);
+  --bs-body-color: var(--text-main);
+
+  --bs-secondary-color: var(--text-muted);
+  --bs-border-color: var(--border-color);
+
+  --bs-card-bg: var(--bg-card);
+  --bs-card-border-color: var(--border-color);
+
+  --bs-link-color: var(--cyan);
+  --bs-link-hover-color: var(--primary-hover);
+
+  --bs-success: var(--green);
+  --bs-warning: var(--yellow);
+  --bs-danger: var(--red);
+  --bs-info: var(--cyan);
+
+  --bs-success-rgb: 0, 172, 91;
+  --bs-warning-rgb: 255, 215, 0;
+  --bs-danger-rgb: 255, 0, 0;
+  --bs-info-rgb: 0, 255, 255;
 }
+
 
 body {
-  font-family: 'Inter', system-ui, sans-serif;
-  line-height: 1.6;
   color: var(--text-main);
   background-color: var(--bg-body);
-  align-items: center;
-  display: flex;
-  flex-direction: column;
 }
 
-
-/* Layout  */
-.container {
-  width: 52%;
-  margin: auto;
-  height: 52%;
-  border: var(--bg-card);
-  padding: 0 1.5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-
+h1 {
+  color: var(--red);
+  font-weight: bolder;
 }
 
-
-
-
-main {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 3rem 0;
-}
-
-/* Nav/Logo */
-.logo {
-  height: 40px;
-}
-
-.logo img {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid white;
-  box-shadow: var(--shadow-sm);
-}
-
-.nav {
-  display: flex;
-  justify-content: center;
-  gap: 1.5rem;
-  margin: 1rem;
-}
-
-.nav a {
-  font-weight: 500;
-  color: var(--text-muted);
-  font-size: 0.95rem;
-}
-
- /*NAV BAR LOGOUT BUTTON: this stying helps it look like other a tags */
-.hidden-form {
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  text-decoration: underline;
-  font: inherit;
-  box-shadow: none;
-  font-weight: 500;
-  color: var(--text-muted);
-  font-size: 0.95rem;
-}
-
-.nav-link-button {
-  background: none;
-  text-decoration: underline;
-  border: none;
-  padding: 0;
-  color: var(--text-muted);
-  cursor: pointer;
-  font: inherit;
-}
-
-
-/* Typography */
-
-
-a:hover {
-  color: #2b6cb0;
-  border-bottom: 2px solid #2b6cb0;
-  background-color: rgba(66, 153, 225, 0.1);
-}
-
-*/ h1,
-h2,
-h3 {
+h2 {
   color: var(--text-main);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  
+}
+
+h3 {
+  color: var(--yellow);
+}
+
+h1,
+h2,
+h3,
+.btn {
+  font-family: var(--font-header);
+  letter-spacing: -0.02em;
+}
+
+body,
+p,
+code {
+  font-family: var(--font-body);
+  color: var(--text-main);
 }
 
 a {
-  color: var(--cyan);
-}
-
-a:hover {
-  color: var(--text-main);
-  border-bottom: 4px solid var(--primary);
-  background-color: rgba(194, 0, 32, 0.2);
-  border-radius: var(--radius-md);
-}
-
-.bio {
-  font-size: 1.2rem;
-  color: var(--text-muted);
-  margin-bottom: 2rem;
-  max-width: 500px;
-}
-
-
-.project-card {
-  width: 100%;
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-image: linear-gradient(to right, var(--cyan), var(--green), var(--yellow), var(--orange)) 1;
-  padding: 2rem;
-  margin-bottom: 2.5rem;
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
-  transition: all 0.2s ease-in-out;
-}
-
-.project-card:hover {
-  transform: scale(1.01);
-  border-color: var(--cyan);
-  box-shadow: 0 0 15px rgba(0, 255, 255, 0.1);
-}
-
-.project-card img {
-  width: 52%;
-  margin: 1.5rem;
-  border-radius: var(--radius-md);
-}
-
-.project-date {
-  font-size: 0.75rem;
-  color: #9ca3af;
-  position: relative;
-  top: 0.2em;
-  font-weight: 400;
-}
-
-/* badge styling */
-.badge {
-  display: inline-block;
-  padding: 0.25rem 0.75rem;
-  font-size: 0.85rem;
-  font-weight: 600;
-  border-radius: 50px;
-  text-transform: capitalize;
-  text-align: center;
-}
-
-/* Status colors */
-
-.active {
-  background-color: rgba(0, 255, 255, 0.1);
-  color: var(--cyan);
-  border: 1px solid var(--cyan);
-}
-
-.completed {
-  background-color: rgba(0, 172, 91, 0.1);
+  text-decoration: none;
   color: var(--green);
-  border: 1px solid var(--green);
 }
 
-.project-description {
+.btn-primary {
+  background-color: var(--orange);
+  border-color: var(--orange);
 
-  width: 100%;
-  max-width: 100%;
-  margin-top: 1rem;
-  padding: 0.5rem;
 }
 
-.project-description h3 {
-  margin-bottom: 0.5rem;
-  font-size: 1.1rem;
-  color: var(--text-main);
-}
+.btn-primary:hover {
+  background-color: var(--yellow) !important;
+  border-color: var(--primary-hover) !important;
 
-.project-description p {
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  word-break: normal;
-  line-height: 1.6;
-  color: var(--text-main);
-  margin: 0;
-  white-space: normal;
 }
 
 
-/* Code Blocks */
-.project-code pre {
-  background: #000000;
-  color: var(--cyan);
-  border: 1px solid var(--border-color);
-}
-
-/* Container for list */
-ul {
-  list-style: none;
-  padding: 0;
-  width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-/* Box around each checkpoint */
-.checkpoint {
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-
-  padding: 1.25rem;
-  margin-bottom: 1rem;
-  position: relative;
-  padding-left: 3.5rem;
-  transition: all 0.3s ease;
-  text-align: left;
-  box-shadow: var(--shadow-sm);
-}
-
-
-.checkpoint p {
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  word-break: normal;
-  line-height: 1.6;
-  color: var(--text-main);
-  margin: 0;
-  white-space: normal;
-}
-
-/* feedback text when checked */
-.checkpoint-toggle:checked+.checkpoint-content strong {
-  text-decoration: line-through;
-  color: var(--text-muted);
-}
-
-/* Style checkpoint DONE */
-.checkpoint.done {
-  background-color: var(--cyan);
-  border-color: var(--cyan);
-}
-
-.checkpoint.done::before {
-  background-color: var(--green);
-  border-color: var(--green);
-  content: "✓";
-  color: var(--text-main);
-  font-size: 1rem;
-  line-height: 1.4rem;
-  text-align: center;
-}
-
-.checkpoint.done strong {
-  text-decoration: line-through;
-  color: var(--text-muted);
-}
-
-/* Edit/Delete links at the bottom card */
-.checkpoint-actions {
-  margin-top: 0.75rem;
-  font-size: 0.85rem;
-  border-top: 1px solid var(--border-color);
-  padding-top: 0.5rem;
-}
-
-/* Forms / Buttons */
-form {
-  width: 100%;
-  max-width: 450px;
-  background: var(--bg-card);
-  padding: 2.5rem;
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
-  text-align: left;
-}
-
-button,
-.btn {
-  width: 100%;
-  padding: 0.8rem 1.5rem;
-  background-color: var(--primary);
-  color: var(--text-main);
-  border-radius: var(--radius-sm);
-  font-weight: 600;
-  border: none;
-  cursor: pointer;
+.card {
+  background-color: var(--bg-card);
   justify-content: center;
-  transition: opacity 0.2s;
 }
 
-button:hover {
-  opacity: 0.9;
+.title-link {
+  color: inherit;
+  /* Takes the color of the parent h tag */
+  text-decoration: none;
+  /
+
 }
 
-
-/* Utils */
-.text-muted {
-  color: var(--text-muted);
-}
-
-.mt-3 {
-  margin-top: 3rem;
+.img {
+  width: 50%;          
+  aspect-ratio: 16 / 9;  
+  object-fit: cover;     
+  object-position: center; 
+  
+  border-radius: 20px;    
+  border: 1px solid var(--border-color);
 }

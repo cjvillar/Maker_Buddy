@@ -3,14 +3,14 @@
 {% load static %}
 
 
-<article class="project-card">
+<div class="container-fluid justify-content-end">
   {% if profile_user.profile.profile_pic %}
-  <img src="{{ profile_user.profile.profile_pic.url }}">
+  <img class="rounded" src="{{ profile_user.profile.profile_pic.url }}">
   {% else %}
-  <img src="{% static 'images/default_profile.png' %}" alt="Default profile">
+  <img  class="rounded" src="{% static 'images/default_profile.png' %}" alt="Default profile">
   {% endif %}
+  <br><br>
   <h1>{{ profile_user.profile.display_name}}</h1>
-
   <div class="bio">
     <p>{{ profile_user.profile.bio }}</p>
     <br><br>
@@ -44,5 +44,5 @@
   <p>No projects yet.</p>
   {% endif %}
 
-</article>
+</div>
 {% endblock %}

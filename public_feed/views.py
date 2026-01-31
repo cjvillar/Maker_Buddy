@@ -8,4 +8,4 @@ class PublicFeedView(ListView):
     template_name = "public_feed/feed.html"
     context_object_name = "projects"
     ordering = "-created_at"
-    paginate_by = 4
+    paginate_by = 2
