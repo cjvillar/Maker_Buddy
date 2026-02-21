@@ -5,41 +5,47 @@
   <h1>{{ project.title | upper}}</h1>
   <p>
     Maker:
-    <a  href="{% url 'accounts:profile' project.owner.username %}">
+    <a href="{% url 'accounts:profile' project.owner.username %}">
       {{ project.owner.profile.display_name|default:project.owner.username }}
     </a>
   </p>
 
-  <p class="project-date">
+  <p>
     Created {{ project.created_at|date:"F j, Y" }} |
     Due {{ project.due_date }}
   </p>
   <p class="badge badge-pill badge-success {{ project.status|lower }}">
     Status: {{ project.status }}
   </p>
-  
-<div>
-  {% if project.image %}
-  <img class="rounded" src="{{ project.image.url }}" alt="{{ project.title }}">
-  {% endif %}
-</div>
-  <section class="project-description">
-    <h3>Description: </h3>
-    <p>{{ project.description }}</p>
-  </section>
 
-<ul>
-  {% for link in project.links.all %}
+  <div>
+    {% if project.image %}
+    <img class="rounded" src="{{ project.image.url }}" alt="{{ project.title }}">
+    {% endif %}
+  </div>
+
+  <h3>Project Links: </h3>
+  <ul>
+
+    {% for link in project.links.all %}
     <li>
       <a href="{{ link.url }}" target="_blank" rel="noopener noreferrer">
         {{ link.get_link_type_display }}
       </a>
     </li>
-  {% endfor %}
-</ul>
+    {% endfor %}
+  </ul>
 
+  <section class=".container-md">
+    <h3>Goal: </h3>
+    <p>{{ project.goal }}</p>
+  </section>
 
-<br></br>
+  <section class=".container-md">
+    <h3>Description: </h3>
+    <p>{{ project.description }}</p>
+  </section>
+  <br></br>
   <section class="checkpoints">
     <h3>Checkpoints: </h3>
 
@@ -66,29 +72,33 @@
             {% endif %}
           </div>
         </div>
-        </div>
-      </li>
-      {% empty %}
-      <li>No checkpoints yet.</li>
-      {% endfor %}
-    </ul>
+</div>
+</li>
+{% empty %}
+<li>No checkpoints yet.</li>
+{% endfor %}
+</ul>
 
-    {% if user == project.owner %}
-    <a href="{% url 'maker_projects:checkpoint_create' project.pk %}">
-      + Add Checkpoint
-    </a>
-    {% endif %}
-  </section>
+{% if user == project.owner %}
+<a href="{% url 'maker_projects:checkpoint_create' project.pk %}">
+  + Add Checkpoint
+</a>
+{% endif %}
+</section>
 <br></br>
-  {% if user == project.owner %}
-  <a href="{% url 'maker_projects:edit' project.pk %}">Edit</a> |
-  <a href="{% url 'maker_projects:delete' project.pk %}">Delete</a> |
-  <a href="{% url 'maker_projects:confirm_complete' project.pk %}">Complete</a>
-  {% endif %}
+{% if user == project.owner %}
+<a href="{% url 'maker_projects:edit' project.pk %}">Edit</a> |
+<a href="{% url 'maker_projects:delete' project.pk %}">Delete</a>
 
- <br></br>
+{% if project.status == "active" %}
+| <a href="{% url 'maker_projects:confirm_complete' project.pk %}">Complete</a>
+{% endif %}
 
- <form action="{% url 'maker_projects:project_like' project.pk %}" method="post">
+{% endif %}
+
+<br></br>
+
+<form action="{% url 'maker_projects:project_like' project.pk %}" method="post">
   {% csrf_token %}
   <button class="btn btn-primary" type="submit">
     LIKES <span class="badge badge-light"> {{ project.likes.count }} </span>

@@ -76,7 +76,7 @@ body {
 }
 
 h1 {
-  color: var(--red);
+  color: var(--green);
   font-weight: bolder;
 }
 
@@ -116,7 +116,7 @@ a {
 }
 
 .btn-primary:hover {
-  background-color: var(--yellow) !important;
+  background-color: var(--orange) !important;
   border-color: var(--primary-hover) !important;
 
 }
