@@ -13,14 +13,14 @@
 
 
   <a class="nav-link"
-    href="{% url 'maker_projects:create' %}">New Project</a>
+    href="{% url 'maker_projects:create_project' %}">New Project</a>
 
   <a class="nav-link"
     href="{% url 'accounts:edit_profile' %}">Edit Profile</a>
 
-  <form id="logout-form" method="post" action="{% url 'logout' %}" class="d-inline">
+  <form id="logout-form" method="post" action="{% url 'logout' %}" class="d-inline ">
     {% csrf_token %}
-    <button type="submit" class="btn btn-outline-secondary btn-sm">Logout</button>
+    <button type="submit" class=" nav-link">Logout</button>
   </form>
 
   {% else %}

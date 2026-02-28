@@ -43,14 +43,12 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
-      # third-party
+    # third-party
     "django_bootstrap5",
     "crispy_forms",
     "crispy_bootstrap5",
     "formtools",
-
-     # local apps
+    # local apps
     "accounts.apps.AccountsConfig",
     "maker_projects",
     "public_feed",
@@ -146,8 +144,18 @@ LOGIN_REDIRECT_URL = "/"
 
 SECURE_CSP = {
     "default-src": [CSP.SELF],
-    "script-src": [CSP.SELF, CSP.NONCE, "https://cdn.jsdelivr.net", "https://stackpath.bootstrapcdn.com"],
-    "style-src": [CSP.SELF, CSP.NONCE, "https://cdn.jsdelivr.net", "https://stackpath.bootstrapcdn.com"],
+    "script-src": [
+        CSP.SELF,
+        CSP.NONCE,
+        "https://cdn.jsdelivr.net",
+        "https://stackpath.bootstrapcdn.com",
+    ],
+    "style-src": [
+        CSP.SELF,
+        CSP.NONCE,
+        "https://cdn.jsdelivr.net",
+        "https://stackpath.bootstrapcdn.com",
+    ],
     "font-src": [CSP.SELF, "https://cdn.jsdelivr.net"],
     "img-src": [CSP.SELF, "https:"],
 }

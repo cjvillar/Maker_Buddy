@@ -1,47 +1,67 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import MakerProject, ProjectFeature, ProjectLike
-from .forms import MakerProjectForm, ProjectFeatureForm, ProjectLinkForm, ProjectLink
+from .forms import (
+    ProjectBasicForm,
+    ProjectTimelineForm,
+    ProjectMediaGoalForm,
+    ProjectLinkForm,
+    ProjectLink,
+    ProjectFeatureForm,
+    MakerProjectForm,
+)
 from django.forms import inlineformset_factory
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
+from formtools.wizard.views import SessionWizardView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import render
 
 
-@login_required
-def create_project(request):
-    has_active = MakerProject.objects.filter(
-        owner=request.user,
-        status=MakerProject.Status.ACTIVE,
-    ).exists()
+class CreateProjectWizard(LoginRequiredMixin, SessionWizardView):
 
-    if request.method == "POST" and has_active:
-        # temlpate informs user of active project
-        return redirect("accounts:profile", request.user.username)
+    form_list = [
+        ("basic", ProjectBasicForm),
+        ("timeline", ProjectTimelineForm),
+        ("media", ProjectMediaGoalForm),
+        ("feature", ProjectFeatureForm),
+        ("link", ProjectLinkForm),
+    ]
 
-    if request.method == "POST":
-        form = MakerProjectForm(request.POST, request.FILES)
-        link_form = ProjectLinkForm(request.POST)
-        if form.is_valid():
-            project = form.save(commit=False)
-            project.owner = request.user
-            project.status = MakerProject.Status.ACTIVE
+    file_storage = FileSystemStorage(location=settings.MEDIA_ROOT)
 
-            project.save()
+    # Check for active pprojects, only allow one
+    def dispatch(self, request, *args, **kwargs):
+        has_active = MakerProject.objects.filter(
+            owner=request.user, status=MakerProject.Status.ACTIVE
+        ).exists()
+        if has_active:
+            return render(request, "maker_projects/active_project_block.html")
+        return super().dispatch(request, *args, **kwargs)
 
-            # optional links
-            if link_form.is_valid() and link_form.cleaned_data:
-                link = link_form.save(commit=False)
-                link.project = project
-                link.save()
+    def done(self, form_list, **kwargs):
+        # Create new project
+        project = MakerProject(
+            owner=self.request.user, status=MakerProject.Status.ACTIVE
+        )
 
-            return redirect("accounts:profile", request.user.username)
-    else:
-        form = MakerProjectForm()
-        link_form = ProjectLinkForm()
+        # Merge first three forms (basic, timeline, media)
+        for form in form_list[:3]:
+            for field, value in form.cleaned_data.items():
+                setattr(project, field, value)
 
-    return render(
-        request,
-        "maker_projects/create_project.html",
-        {"form": form, "link_form": link_form, "has_active_project": has_active},
-    )
+        project.save()
+
+        # Handle feature and link forms, TODO: Links still not optional must fix
+        feature_data = form_list[3].cleaned_data
+        if feature_data:
+            ProjectFeature.objects.create(project=project, **feature_data)
+
+        link_data = form_list[4].cleaned_data
+        if link_data:
+            ProjectLink.objects.create(project=project, **link_data)
+
+        return redirect("accounts:profile", self.request.user.username)
 
 
 @login_required
@@ -160,7 +180,9 @@ def create_ProjectFeature(request, project_pk):
 
 @login_required
 def edit_ProjectFeature(request, pk):
-    ProjectFeature = get_object_or_404(ProjectFeature, pk=pk, project__owner=request.user)
+    ProjectFeature = get_object_or_404(
+        ProjectFeature, pk=pk, project__owner=request.user
+    )
 
     if request.method == "POST":
         project_pk = ProjectFeature.project.pk
@@ -184,7 +206,9 @@ def edit_ProjectFeature(request, pk):
 
 @login_required
 def delete_ProjectFeature(request, pk):
-    ProjectFeature = get_object_or_404(ProjectFeature, pk=pk, project__owner=request.user)
+    ProjectFeature = get_object_or_404(
+        ProjectFeature, pk=pk, project__owner=request.user
+    )
 
     if request.method == "POST":
         project_pk = ProjectFeature.project.pk

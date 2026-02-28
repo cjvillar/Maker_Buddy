@@ -145,6 +145,7 @@ class ProjectLike(models.Model):
             )
         ]
 
+
 class ProjectFeature(models.Model):
     project = models.ForeignKey(
         MakerProject,

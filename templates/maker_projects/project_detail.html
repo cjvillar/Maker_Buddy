@@ -50,17 +50,17 @@
     <h3>Project Features: </h3>
 
     <ul>
-      {% for ProjectFeature in project.REMOVEMEfeatures.all %}
+      {% for ProjectFeature in project.features.all %}
       <li>
         <div class="ProjectFeature {% if ProjectFeature.is_complete %}done{% endif %}" id="ProjectFeature-{{ ProjectFeature.id }}">
 
-          <input type="checkbox" class="ProjectFeature-toggle" data-id="{{ ProjectFeature.id }}">
-          {% if ProjectFeature.is_complete%}checked{% endif %} </input>
+          <!-- <input type="checkbox" class="ProjectFeature-toggle" data-id="{{ ProjectFeature.id }}">
+          {% if ProjectFeature.is_complete%}checked{% endif %} </input> -->
 
           <strong>{{ ProjectFeature.title }}</strong>
           <p>{{ ProjectFeature.description }}</p>
 
-          {% if user == project.owner %}
+          <!-- {% if user == project.owner %}
           <div class="ProjectFeature-actions">
             <a href="{% url 'maker_projects:ProjectFeature_edit' ProjectFeature.pk %}">
               Edit
@@ -69,7 +69,7 @@
             <a href="{% url 'maker_projects:ProjectFeature_delete' ProjectFeature.pk %}">
               Delete
             </a>
-            {% endif %}
+            {% endif %} -->
           </div>
         </div>
 </div>
@@ -79,11 +79,11 @@
 {% endfor %}
 </ul>
 
-{% if user == project.owner %}
+<!-- {% if user == project.owner %}
 <a href="{% url 'maker_projects:ProjectFeature_create' project.pk %}">
   + Add Project Feature
 </a>
-{% endif %}
+{% endif %} -->
 </section>
 <br></br>
 {% if user == project.owner %}
