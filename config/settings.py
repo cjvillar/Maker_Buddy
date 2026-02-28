@@ -31,7 +31,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "DJANGO_TEST_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.environ.get("DEBUG", default=0))
 
-ALLOWED_HOSTS = ['.localhost','127.0.0.1']
+ALLOWED_HOSTS = [".localhost", "127.0.0.1"]
 
 
 # Application definition
@@ -43,11 +43,20 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # third-party
+    "django_bootstrap5",
+    "crispy_forms",
+    "crispy_bootstrap5",
+    "formtools",
+    # local apps
     "accounts.apps.AccountsConfig",
     "maker_projects",
     "public_feed",
     "awards",
 ]
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -135,6 +144,18 @@ LOGIN_REDIRECT_URL = "/"
 
 SECURE_CSP = {
     "default-src": [CSP.SELF],
-    "script-src": [CSP.SELF, CSP.NONCE],
+    "script-src": [
+        CSP.SELF,
+        CSP.NONCE,
+        "https://cdn.jsdelivr.net",
+        "https://stackpath.bootstrapcdn.com",
+    ],
+    "style-src": [
+        CSP.SELF,
+        CSP.NONCE,
+        "https://cdn.jsdelivr.net",
+        "https://stackpath.bootstrapcdn.com",
+    ],
+    "font-src": [CSP.SELF, "https://cdn.jsdelivr.net"],
     "img-src": [CSP.SELF, "https:"],
 }

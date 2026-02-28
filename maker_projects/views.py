@@ -1,47 +1,67 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import MakerProject, CheckPoint, ProjectLike
-from .forms import MakerProjectForm, CheckPointForm, ProjectLinkForm, ProjectLink
+from .models import MakerProject, ProjectFeature, ProjectLike
+from .forms import (
+    ProjectBasicForm,
+    ProjectTimelineForm,
+    ProjectMediaGoalForm,
+    ProjectLinkForm,
+    ProjectLink,
+    ProjectFeatureForm,
+    MakerProjectForm,
+)
 from django.forms import inlineformset_factory
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
+from formtools.wizard.views import SessionWizardView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import render
 
 
-@login_required
-def create_project(request):
-    has_active = MakerProject.objects.filter(
-        owner=request.user,
-        status=MakerProject.Status.ACTIVE,
-    ).exists()
+class CreateProjectWizard(LoginRequiredMixin, SessionWizardView):
 
-    if request.method == "POST" and has_active:
-        # temlpate informs user of active project
-        return redirect("accounts:profile", request.user.username)
+    form_list = [
+        ("basic", ProjectBasicForm),
+        ("timeline", ProjectTimelineForm),
+        ("media", ProjectMediaGoalForm),
+        ("feature", ProjectFeatureForm),
+        ("link", ProjectLinkForm),
+    ]
 
-    if request.method == "POST":
-        form = MakerProjectForm(request.POST, request.FILES)
-        link_form = ProjectLinkForm(request.POST)
-        if form.is_valid():
-            project = form.save(commit=False)
-            project.owner = request.user
-            project.status = MakerProject.Status.ACTIVE
+    file_storage = FileSystemStorage(location=settings.MEDIA_ROOT)
 
-            project.save()
+    # Check for active pprojects, only allow one
+    def dispatch(self, request, *args, **kwargs):
+        has_active = MakerProject.objects.filter(
+            owner=request.user, status=MakerProject.Status.ACTIVE
+        ).exists()
+        if has_active:
+            return render(request, "maker_projects/active_project_block.html")
+        return super().dispatch(request, *args, **kwargs)
 
-            # optional links
-            if link_form.is_valid() and link_form.cleaned_data:
-                link = link_form.save(commit=False)
-                link.project = project
-                link.save()
+    def done(self, form_list, **kwargs):
+        # Create new project
+        project = MakerProject(
+            owner=self.request.user, status=MakerProject.Status.ACTIVE
+        )
 
-            return redirect("accounts:profile", request.user.username)
-    else:
-        form = MakerProjectForm()
-        link_form = ProjectLinkForm()
+        # Merge first three forms (basic, timeline, media)
+        for form in form_list[:3]:
+            for field, value in form.cleaned_data.items():
+                setattr(project, field, value)
 
-    return render(
-        request,
-        "maker_projects/create_project.html",
-        {"form": form, "link_form": link_form, "has_active_project": has_active},
-    )
+        project.save()
+
+        # Handle feature and link forms, TODO: Links still not optional must fix
+        feature_data = form_list[3].cleaned_data
+        if feature_data:
+            ProjectFeature.objects.create(project=project, **feature_data)
+
+        link_data = form_list[4].cleaned_data
+        if link_data:
+            ProjectLink.objects.create(project=project, **link_data)
+
+        return redirect("accounts:profile", self.request.user.username)
 
 
 @login_required
@@ -135,66 +155,70 @@ def add_project_link(request, project_id):
 
 
 @login_required
-def create_checkpoint(request, project_pk):
+def create_ProjectFeature(request, project_pk):
     project = get_object_or_404(MakerProject, pk=project_pk, owner=request.user)
 
     if request.method == "POST":
-        form = CheckPointForm(request.POST)
+        form = ProjectFeatureForm(request.POST)
         if form.is_valid():
-            checkpoint = form.save(commit=False)
-            checkpoint.project = project
-            checkpoint.order = project.checkpoints.count()
-            checkpoint.save()
+            ProjectFeature = form.save(commit=False)
+            ProjectFeature.project = project
+            ProjectFeature.order = project.features.count()
+            ProjectFeature.save()
             return redirect(
                 "maker_projects:detail", project.pk
-            )  # redirect user to feed after checkpoint created
+            )  # redirect user to feed after ProjectFeature created
     else:
-        form = CheckPointForm()
+        form = ProjectFeatureForm()
 
     return render(
         request,
-        "maker_projects/checkpoints/create.html",
+        "maker_projects/ProjectFeatures/create.html",
         {"form": form, "project": project},
     )
 
 
 @login_required
-def edit_checkpoint(request, pk):
-    checkpoint = get_object_or_404(CheckPoint, pk=pk, project__owner=request.user)
+def edit_ProjectFeature(request, pk):
+    ProjectFeature = get_object_or_404(
+        ProjectFeature, pk=pk, project__owner=request.user
+    )
 
     if request.method == "POST":
-        project_pk = checkpoint.project.pk
-        form = CheckPointForm(request.POST, instance=checkpoint)
+        project_pk = ProjectFeature.project.pk
+        form = ProjectFeatureForm(request.POST, instance=ProjectFeature)
         if form.is_valid():
             form.save()
             return redirect("maker_projects:detail", project_pk)
     else:
-        form = CheckPointForm(instance=checkpoint)
+        form = ProjectFeatureForm(instance=ProjectFeature)
 
     return render(
         request,
-        "maker_projects/checkpoints/edit.html",
+        "maker_projects/ProjectFeatures/edit.html",
         {
             "form": form,
-            "checkpoint": checkpoint,
-            "project": checkpoint.project,
+            "ProjectFeature": ProjectFeature,
+            "project": ProjectFeature.project,
         },
     )
 
 
 @login_required
-def delete_checkpoint(request, pk):
-    checkpoint = get_object_or_404(CheckPoint, pk=pk, project__owner=request.user)
+def delete_ProjectFeature(request, pk):
+    ProjectFeature = get_object_or_404(
+        ProjectFeature, pk=pk, project__owner=request.user
+    )
 
     if request.method == "POST":
-        project_pk = checkpoint.project.pk
-        checkpoint.delete()
+        project_pk = ProjectFeature.project.pk
+        ProjectFeature.delete()
         return redirect("maker_projects:detail", project_pk)
 
     return render(
         request,
-        "maker_projects/checkpoints/confirm_delete.html",
-        {"checkpoint": checkpoint},
+        "maker_projects/ProjectFeatures/confirm_delete.html",
+        {"ProjectFeature": ProjectFeature},
     )
 
 

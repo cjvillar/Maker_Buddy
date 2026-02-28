@@ -6,7 +6,7 @@
 
 <form action="{% url 'maker_projects:confirm_complete' project.pk %}" method="post">
   {% csrf_token %}
-  <button type="submit">Mark as Completed</button>
+  <button class="btn btn-primary" type="submit">Mark as Completed</button>
 </form>
 </article>
 {% endblock %}

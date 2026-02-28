@@ -16,15 +16,36 @@ class MakerProject(models.Model):
         User, on_delete=models.CASCADE, related_name="maker_projects"
     )
 
-    title = models.CharField(max_length=200)
+    title = models.CharField(
+        max_length=200, help_text="Give your project a descriptive name."
+    )
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    due_date = models.DateField(null=True, blank=True)
+    due_date = models.DateField(
+        null=True,
+        blank=True,
+        help_text="Set reasonable timeframe to finish your project.",
+    )
 
-    image = models.ImageField(upload_to="project_images/", blank=True)
+    image = models.ImageField(
+        upload_to="project_images/",
+        blank=True,
+        help_text="Please add an image of your hardware.",
+    )
 
     status = models.CharField(
         max_length=20, choices=Status.choices, default=Status.ACTIVE
+    )
+
+    goal = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text="Short, single-sentence goal for the project",
+    )
+
+    definition_of_done = models.TextField(
+        blank=True,
+        help_text="Clear description of when this project is considered complete",
     )
 
     class Meta:
@@ -107,23 +128,6 @@ class ProjectLink(models.Model):
         return f"{self.get_link_type_display()}: {self.url}"
 
 
-class CheckPoint(models.Model):
-    project = models.ForeignKey(
-        MakerProject, on_delete=models.CASCADE, related_name="checkpoints"
-    )
-    title = models.CharField(max_length=200)
-    description = models.TextField(blank=True)
-    is_complete = models.BooleanField(default=False)
-    order = models.PositiveIntegerField(default=0)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ["order", "created_at"]
-
-    def __str__(self):
-        return f"{self.project.title} – {self.title}"
-
-
 # NOTE: might not keep, just test for now
 class ProjectLike(models.Model):
     user = models.ForeignKey(
@@ -140,3 +144,34 @@ class ProjectLike(models.Model):
                 name="unique_user_project_like",
             )
         ]
+
+
+class ProjectFeature(models.Model):
+    project = models.ForeignKey(
+        MakerProject,
+        on_delete=models.CASCADE,
+        related_name="features",
+    )
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["created_at"]
+
+    def __str__(self):
+        return self.title
+
+
+class ProjectRequirement(models.Model):
+    project = models.ForeignKey(
+        MakerProject,
+        on_delete=models.CASCADE,
+        related_name="requirements",
+    )
+    description = models.CharField(max_length=255)
+    is_met = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.description

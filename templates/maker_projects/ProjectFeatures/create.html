@@ -3,7 +3,7 @@
 
 
 <form method="post">
-    <h2>Add CheckPoint for "{{ project.title }}"</h2>
+    <h2>Add Project Feature for "{{ project.title }}"</h2>
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Add</button>

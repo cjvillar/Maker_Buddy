@@ -1,15 +1,15 @@
 {% extends "base.html" %}
-
+{% load crispy_forms_tags %}
 {% block content %}
 
 
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     <h1>Delete Project</h1>
 
 <p>Are you sure you want to delete "{{ project.title }}"?</p>
 
     {% csrf_token %}
-    <button type="submit">Yes, delete</button>
+    <button type="submit"  class="btn btn-primary">Yes, delete</button>
     <a href="{% url 'maker_projects:detail' project.pk %}">Cancel</a>
 </form>
 {% endblock %}
