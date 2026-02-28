@@ -144,3 +144,11 @@ a {
   border-radius: 20px;    
   border: 1px solid var(--border-color);
 }
+
+
+
+/* Crispy Forms*/
+
+.custom-file-input::file-selector-button {
+  color: var(--bg-body) !important;
+}

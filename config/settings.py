@@ -46,6 +46,9 @@ INSTALLED_APPS = [
 
       # third-party
     "django_bootstrap5",
+    "crispy_forms",
+    "crispy_bootstrap5",
+    "formtools",
 
      # local apps
     "accounts.apps.AccountsConfig",
@@ -53,6 +56,9 @@ INSTALLED_APPS = [
     "public_feed",
     "awards",
 ]
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -140,7 +146,7 @@ LOGIN_REDIRECT_URL = "/"
 
 SECURE_CSP = {
     "default-src": [CSP.SELF],
-     "script-src": [CSP.SELF, CSP.NONCE, "https://cdn.jsdelivr.net", "https://stackpath.bootstrapcdn.com"],
+    "script-src": [CSP.SELF, CSP.NONCE, "https://cdn.jsdelivr.net", "https://stackpath.bootstrapcdn.com"],
     "style-src": [CSP.SELF, CSP.NONCE, "https://cdn.jsdelivr.net", "https://stackpath.bootstrapcdn.com"],
     "font-src": [CSP.SELF, "https://cdn.jsdelivr.net"],
     "img-src": [CSP.SELF, "https:"],

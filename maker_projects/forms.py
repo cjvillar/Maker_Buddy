@@ -1,18 +1,28 @@
 from django import forms
 
-from .models import MakerProject, CheckPoint, ProjectLink
+from .models import MakerProject, ProjectFeature, ProjectLink
 
 
 class MakerProjectForm(forms.ModelForm):
     class Meta:
         model = MakerProject
-        fields = ["title", "description", "due_date", "image","goal"]
-        widgets = {"due_date": forms.SelectDateWidget(attrs={"type": "date"})}
+        fields = ["title", "description", "due_date", "image", "goal"]
+        widgets = {
+             "due_date": forms.DateInput(
+                attrs={
+                    "type": "date",
+                    "class": "form-control"
+                }
+            ),
+            "image": forms.ClearableFileInput(
+                attrs={"class": "form-control custom-file-input", "accept": "image/*"}
+            ),
+        }
 
 
-class CheckPointForm(forms.ModelForm):
+class ProjectFeatureForm(forms.ModelForm):
     class Meta:
-        model = CheckPoint
+        model = ProjectFeature
         fields = ["title", "description"]
 
 

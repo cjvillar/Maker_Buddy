@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load crispy_forms_tags %}
 {% block content %}
 <form method="post" enctype="multipart/form-data">
     <div class="form-group">
@@ -8,9 +8,9 @@
     <p>You already have an active project.</p>
     {% else %}
     <h1>Start a Project</h1>
-    {{ form.as_p }}
+    {{ form|crispy }}
     <h3>Add project repo link (optional)</h3>
-    {{ link_form.as_p }}
+    {{ link_form|crispy }}
     <button class="btn btn-primary" type="submit">Create</button>
     {% endif %}
     </div>
