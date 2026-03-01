@@ -1,6 +1,8 @@
 # MAKE BUDDY [![Django CI](https://github.com/cjvillar/Maker_Buddy/actions/workflows/django.yml/badge.svg?branch=main)](https://github.com/cjvillar/Maker_Buddy/actions/workflows/django.yml)
 
-MakerBuddy helps makers stay accountable, get support, and actually finish their projects.
+MakerBuddy, a place to showcase your hardware projects, from prototype to finished build. Document your builds with project pages, track the components you used, and share your work with fellow makers. 
+Connect, discover new projects, and share everything from your first blinking LED to your most ambitious creation. 
+Helping makers stay accountable, get support, and actually finish their projects.
 
 
 ## Get Started
