@@ -33,6 +33,7 @@ DEBUG = bool(os.environ.get("DEBUG", default=0))
 
 ALLOWED_HOSTS = [".localhost", "127.0.0.1"]
 
+SITE_ID = 1
 
 # Application definition
 
@@ -43,11 +44,21 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+     "django.contrib.sites",
+
     # third-party
     "django_bootstrap5",
     "crispy_forms",
     "crispy_bootstrap5",
     "formtools",
+
+    # allAuth
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
+    "allauth.socialaccount.providers.github",
+
     # local apps
     "accounts.apps.AccountsConfig",
     "maker_projects",
@@ -67,6 +78,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.csp.ContentSecurityPolicyMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -87,6 +99,15 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "config.wsgi.application"
+
+
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by email
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
 
 
 # Database
@@ -158,4 +179,43 @@ SECURE_CSP = {
     ],
     "font-src": [CSP.SELF, "https://cdn.jsdelivr.net"],
     "img-src": [CSP.SELF, "https:"],
+}
+
+
+#allAuth stuff:
+
+SOCIALACCOUNT_ONLY = True
+
+# Where to redirect after login/logout
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
+ACCOUNT_LOGOUT_REDIRECT_URL = "/"
+
+# Account settings, * means req remove if optional
+#ACCOUNT_LOGIN_METHODS =  {"email"}
+#ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
+#ACCOUNT_EMAIL_VERIFICATION = "optional"  # "mandatory", "optional", or "none"
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+
+# Social account settings in ENV 
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "APP": {
+            "client_id": os.environ.get("GOOGLE_CLIENT_ID"),      
+            "secret": os.environ.get("GOOGLE_CLIENT_SECRET"),
+            "key": "",
+        },
+        "SCOPE": ["profile", "email"],
+        "AUTH_PARAMS": {"access_type": "online"},
+        "OAUTH_PKCE_ENABLED": True,
+    },
+    "github": {
+        "APP": {
+            "client_id": os.environ.get("GITHUB_CLIENT_ID"),
+            "secret": os.environ.get("GITHUB_CLIENT_SECRET"),
+            "key": "", #gihub does not use
+        },
+        "SCOPE": ["user", "user:email"],
+    },
 }
