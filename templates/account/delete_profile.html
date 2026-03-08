@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">Delete Account</h4>
+                </div>
+                <div class="card-body text-center">
+                    <p>Are you sure you want to delete your account <strong>{{ request.user.username }}</strong>?</p>
+                    <p class="text-muted small">This will permanently delete your account, profile, and all social logins. This cannot be undone.</p>
+
+                    <form method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger w-100 mb-2">
+                            <i class="fas fa-trash me-2"></i> Yes, Delete My Account
+                        </button>
+                        <a href="{% url 'accounts:edit_profile' %}" class="btn btn-secondary w-100">
+                            <i class="fas fa-arrow-left me-2"></i> Cancel
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

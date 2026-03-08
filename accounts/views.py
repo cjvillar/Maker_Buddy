@@ -10,6 +10,9 @@ from allauth.account.views import SignupView
 from allauth.account import app_settings
 
 
+from allauth.account.models import EmailAddress
+from allauth.socialaccount.models import SocialAccount
+
 # class CustomSignupView(SignupView):
 #     def form_valid(self, form):
 
@@ -66,3 +69,16 @@ def edit_profile(request):
         form = UserProfileForm(instance=profile)
 
     return render(request, "account/edit_profile.html", {"form": form})
+
+
+
+@login_required
+def delete_profile(request):
+    if request.method == "POST":
+        user = request.user
+        SocialAccount.objects.filter(user=user).delete()  # removes github/google connections
+        EmailAddress.objects.filter(user=user).delete()   # removes allauth email records
+        user.delete()                                      # deletes user and profile
+        return redirect("account_login")
+    
+    return render(request, "account/delete_profile.html")
