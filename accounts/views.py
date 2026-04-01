@@ -5,6 +5,24 @@ from django.contrib.auth.decorators import login_required
 from .forms import UserProfileForm
 from awards.models import UserAward
 
+from django.contrib import messages
+from allauth.account.views import SignupView
+from allauth.account import app_settings
+
+
+from allauth.account.models import EmailAddress
+from allauth.socialaccount.models import SocialAccount
+
+# class CustomSignupView(SignupView):
+#     def form_valid(self, form):
+
+#         response = super().form_valid(form)
+
+#         if app_settings.EMAIL_VERIFICATION_SETTING == app_settings.EmailVerificationMethod.MANDITORY:
+#             messages.info(self.request, "WE SENT AN EMAIL ...")
+#         else:
+#             messages.success(self.request, "YOU GOOD BRAH")
+#         return response
 
 def signup(request):
     if request.method == "POST":
@@ -15,7 +33,7 @@ def signup(request):
     else:
         form = UserCreationForm()
 
-    return render(request, "accounts/signup.html", {"form": form})
+    return render(request, "account/signup.html", {"form": form})
 
 
 def user_profile(request, username):
@@ -30,7 +48,7 @@ def user_profile(request, username):
 
     return render(
         request,
-        "accounts/profile.html",
+        "account/profile.html",
         {
             "profile_user": profile_user,
             "projects": projects,
@@ -50,4 +68,17 @@ def edit_profile(request):
     else:
         form = UserProfileForm(instance=profile)
 
-    return render(request, "accounts/edit_profile.html", {"form": form})
+    return render(request, "account/edit_profile.html", {"form": form})
+
+
+
+@login_required
+def delete_profile(request):
+    if request.method == "POST":
+        user = request.user
+        SocialAccount.objects.filter(user=user).delete()  # removes github/google connections
+        EmailAddress.objects.filter(user=user).delete()   # removes allauth email records
+        user.delete()                                      # deletes user and profile
+        return redirect("account_login")
+    
+    return render(request, "account/delete_profile.html")
