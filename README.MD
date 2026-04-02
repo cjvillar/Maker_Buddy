@@ -10,7 +10,7 @@ Helping makers stay accountable, get support, and actually finish their projects
 ```bash 
 python -m venv .vpip env
 .venv\Scripts\activate
-pip install -r requirments.txt
+pip install -r requirements.txt
 
 ```
 
