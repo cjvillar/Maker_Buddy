@@ -31,8 +31,15 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "DJANGO_TEST_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.environ.get("DEBUG", default=0))
 
-_raw_hosts = os.environ.get("ALLOWED_HOSTS", ".localhost,127.0.0.1")
-ALLOWED_HOSTS = [h.strip() for h in _raw_hosts.split(",") if h.strip()]
+
+_raw_hosts = os.environ.get("ALLOWED_HOSTS", "")
+
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    "0.0.0.0",
+    *[h.strip() for h in _raw_hosts.split(",") if h.strip()],
+]
 
 SITE_ID = 1
 
