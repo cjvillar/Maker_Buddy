@@ -98,7 +98,7 @@ python manage.py migrate
 ### Run tests
 
 ```bash
-python manage.py test accounts/tests
+python manage.py test accounts --settings=config.settings_test
 ```
 
 ---
