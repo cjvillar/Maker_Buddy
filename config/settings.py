@@ -230,6 +230,8 @@ ACCOUNT_LOGOUT_REDIRECT_URL = "/"
 #ACCOUNT_EMAIL_VERIFICATION = "optional"  # "mandatory", "optional", or "none"
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
+SOCIALACCOUNT_ADAPTER = "accounts.adapter.GitHubWhitelistAdapter"
+ALLOWED_GITHUB_USERNAMES = {"cjvillar"}
 
 # Social account settings in ENV 
 SOCIALACCOUNT_PROVIDERS = {
@@ -249,6 +251,6 @@ SOCIALACCOUNT_PROVIDERS = {
             "secret": os.environ.get("GITHUB_CLIENT_SECRET"),
             "key": "", #gihub does not use
         },
-        "SCOPE": ["user", "user:email"],
+        "SCOPE": [],
     },
 }

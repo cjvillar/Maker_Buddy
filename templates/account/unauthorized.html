@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-4 text-center">
+            <h3 class="mb-3">Access Denied</h3>
+            <p class="text-muted">Your GitHub account is not authorized to access this app.</p>
+            <a href="{% url 'account_login' %}" class="btn btn-dark w-100">
+                Back to Login <i class="fab fa-github fa-lg me-2"></i>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

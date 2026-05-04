@@ -82,3 +82,6 @@ def delete_profile(request):
         return redirect("account_login")
     
     return render(request, "account/delete_profile.html")
+
+def unauthorized(request):
+    return render(request, "account/unauthorized.html")
