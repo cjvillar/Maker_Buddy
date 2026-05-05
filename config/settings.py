@@ -38,7 +38,12 @@ ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
     "0.0.0.0",
+    "makerbuddy.cjvillarreal.com",
     *[h.strip() for h in _raw_hosts.split(",") if h.strip()],
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://makerbuddy.cjvillarreal.com",
 ]
 
 SITE_ID = 1
