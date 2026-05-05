@@ -185,14 +185,48 @@ STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
-STORAGES = {
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
-}
 
-MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
+# --- Media / File Storage ---
+USE_CLOUD_STORAGE = os.environ.get("USE_CLOUD_STORAGE", "False") == "True"
+
+if USE_CLOUD_STORAGE:
+    # Production: Cloudflare R2 (S3-compatible, no AWS account needed)
+    STORAGES = {
+        "default": {
+            "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+            "OPTIONS": {
+                "access_key": os.environ.get("R2_ACCESS_KEY_ID"),
+                "secret_key": os.environ.get("R2_SECRET_ACCESS_KEY"),
+                "bucket_name": os.environ.get("R2_BUCKET_NAME", "media"),
+                "region_name": "auto",
+                "endpoint_url": os.environ.get("R2_ENDPOINT_URL"),
+                "file_overwrite": False,
+                "default_acl": "public-read",
+                "querystring_auth": False,
+            },
+        },
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+    }
+    MEDIA_URL = f"{os.environ.get('R2_ENDPOINT_URL')}/{os.environ.get('R2_BUCKET_NAME', 'media')}/"
+    MEDIA_ROOT = ""
+
+else:
+    # Local dev: unchanged, uses local media/ folder
+    STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+    }
+    MEDIA_URL = "/media/"
+    MEDIA_ROOT = BASE_DIR / "media"
+
+
+
 LOGOUT_REDIRECT_URL = "/"
 LOGIN_REDIRECT_URL = "/"
 
