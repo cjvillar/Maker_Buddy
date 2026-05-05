@@ -16,7 +16,8 @@ from dotenv import load_dotenv
 from django.utils.csp import CSP
 
 # find/load .env file
-load_dotenv(".env")
+if os.path.exists(".env"):
+    load_dotenv(".env", override=False)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
