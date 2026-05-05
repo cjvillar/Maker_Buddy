@@ -29,7 +29,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY", "DJANGO_TEST_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(os.environ.get("DEBUG", default=0))
+DEBUG = os.environ.get("DEBUG", "0") == "1"
 
 
 _raw_hosts = os.environ.get("ALLOWED_HOSTS", "")
@@ -231,10 +231,6 @@ else:
     MEDIA_ROOT = BASE_DIR / "media"
 
 
-
-LOGOUT_REDIRECT_URL = "/"
-LOGIN_REDIRECT_URL = "/"
-
 SECURE_CSP = {
     "default-src": [CSP.SELF],
     "script-src": [
@@ -262,6 +258,9 @@ SOCIALACCOUNT_ONLY = True
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 ACCOUNT_LOGOUT_REDIRECT_URL = "/"
+
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https" 
+SOCIALACCOUNT_LOGIN_ON_GET = True       
 
 # Account settings, * means req remove if optional
 #ACCOUNT_LOGIN_METHODS =  {"email"}
