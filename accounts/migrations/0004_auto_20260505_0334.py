@@ -3,14 +3,14 @@
 from django.db import migrations
 
 def update_site(apps, schema_editor):
-    SiteModel = apps.get_model("sites", "Site")
-    SiteModel.objects.update_or_create(
-        id=1,
-        defaults={
-            "domain": "makerbuddy.cjvillarreal.com",
-            "name": "makerbuddy.cjvillarreal.com",
-        },
-    )
+    try:
+        SiteModel = apps.get_model("sites", "Site")
+        SiteModel.objects.filter(id=1).update(
+            domain="makerbuddy.cjvillarreal.com",
+            name="makerbuddy.cjvillarreal.com"
+        )
+    except LookupError:
+        pass
 
 
 class Migration(migrations.Migration):
