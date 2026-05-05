@@ -215,7 +215,7 @@ if USE_CLOUD_STORAGE:
             "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
         },
     }
-    MEDIA_URL = f"{os.environ.get('R2_ENDPOINT_URL')}/{os.environ.get('R2_BUCKET_NAME', 'media')}/"
+    MEDIA_URL = os.environ.get("MEDIA_URL", "/media/")
     MEDIA_ROOT = ""
 
 else:
