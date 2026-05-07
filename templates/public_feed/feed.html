@@ -1,46 +1,66 @@
 {% extends "base.html" %}
-
 {% load static %}
-
-
 {% block content %}
 
-<div class="container-fluid">
- <h2>Maker Projects</h2>
-  {% for project in projects %}
-  <div class="card shadow p-3 mb-5 rounded">
-    <h2 class="card-title"><a class="title-link" href="{% url 'maker_projects:detail' project.pk %}">
-        {{ project.title }} :  <small class="text-muted"> {{ project.status }}</small>
-      </a></h2>
-    {% if project.image %}
-    <img class="rounded" src="{{ project.image.url }}" alt="{{ project.title }}">
-    {% endif %}
-    <p class="card-text">
-      by
-      <a class="title-link" href="{% url 'accounts:profile' project.owner.username %}">
-        {{ project.owner.profile.display_name| default:"Maker" }}
-      </a>
-      <br>
-      {{ project.description|truncatewords:30 }}
-    </p>
+<div class="container py-4">
+  <h2 class="mb-4">Maker Projects</h2>
 
+  {% for project in projects %}
+  <div class="card mb-4">
+    <div class="card-body">
+
+      <div class="d-flex align-items-center gap-2 mb-2">
+        <h2 class="card-title mb-0">
+          <a class="title-link" href="{% url 'maker_projects:detail' project.pk %}">
+            {{ project.title }}
+          </a>
+        </h2>
+        {% if project.status == "active" %}
+        <span class="badge status-active">active</span>
+        {% elif project.status == "complete" %}
+        <span class="badge status-complete">complete</span>
+        {% else %}
+        <span class="badge status-default">{{ project.status }}</span>
+        {% endif %}
+      </div>
+
+      {% if project.image %}
+      <img class="feed-card-img mb-3" src="{{ project.image.url }}" alt="{{ project.title }}">
+      {% endif %}
+
+      <p class="card-text mb-1">
+        by <a href="{% url 'accounts:profile' project.owner.username %}">
+          {{ project.owner.profile.display_name|default:"Maker" }}
+        </a>
+      </p>
+      <p class="card-text text-muted small">{{ project.description|truncatewords:30 }}</p>
+
+    </div>
   </div>
   {% empty %}
-  <p>No projects yet. Be the first to share!</p>
+  <p class="text-muted fst-italic">No projects yet. Be the first to share!</p>
   {% endfor %}
 
-  <ul class="pagination">
+  <ul class="pagination justify-content-center mt-4">
     {% if page_obj.has_previous %}
-    <li class="page-item"><a href="?page={{  page_obj.previous_page_number  }}">Previous</a></li>
+    <li class="page-item">
+      <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+    </li>
     {% endif %}
 
-    <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+    <li class="page-item disabled">
+      <span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+    </li>
 
     {% if page_obj.has_next %}
-    <li class="page-item"> <a href="?page={{  page_obj.next_page_number  }}">Next</a></li>
-    <li class="page-item"><a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a></li>
+    <li class="page-item">
+      <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+    </li>
+    <li class="page-item">
+      <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+    </li>
     {% endif %}
-
-    {% endblock %}
   </ul>
+
 </div>
+{% endblock %}

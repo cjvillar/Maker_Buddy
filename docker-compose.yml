@@ -30,12 +30,15 @@ services:
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
       GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
       GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET}
+      DIGIKEY_CLIENT_ID: ${DIGIKEY_CLIENT_ID}
+      DIGIKEY_CLIENT_SECRET: ${DIGIKEY_CLIENT_SECRET}
     depends_on:
       db:
         condition: service_healthy
     command: >
       sh -c "python manage.py migrate --noinput &&
-             gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 3 --timeout 120"
+              python manage.py createcachetable &&
+              gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 3 --timeout 120"
 
 volumes:
   postgres_data:

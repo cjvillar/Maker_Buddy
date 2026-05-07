@@ -15,6 +15,8 @@ import os
 from dotenv import load_dotenv
 from django.utils.csp import CSP
 
+
+
 # find/load .env file
 if os.path.exists(".env"):
     load_dotenv(".env", override=False)
@@ -58,7 +60,12 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-     "django.contrib.sites",
+    "django.contrib.sites",
+    "django_tasks",
+    "django_tasks_db",
+    "django.contrib.humanize",
+
+
 
     # third-party
     "django_bootstrap5",
@@ -78,6 +85,7 @@ INSTALLED_APPS = [
     "maker_projects",
     "public_feed",
     "awards",
+    "maker_parts",
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
@@ -152,6 +160,28 @@ else:
             "NAME": BASE_DIR / "db.sqlite3",
         }
     }
+
+
+
+
+# Maker_Parts Tasks
+DIGIKEY_CLIENT_ID     = os.environ.get("DIGIKEY_CLIENT_ID")
+DIGIKEY_CLIENT_SECRET = os.environ.get("DIGIKEY_CLIENT_SECRET")
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'makerbuddy_cache',
+    }
+}   
+
+TASKS = {
+    "default" : {
+        "BACKEND": "django_tasks_db.DatabaseBackend",
+        "QUEUES":["default"],
+    }
+}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators

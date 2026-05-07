@@ -109,6 +109,16 @@ a {
   color: var(--green);
 }
 
+.table td,
+.table th {
+  color: var(--text-main);
+}
+
+/*Search magnifying glass */
+.fa-magnifying-glass {
+  color: var(--text-muted);
+}
+
 .btn-primary {
   background-color: var(--orange);
   border-color: var(--orange);
@@ -145,10 +155,82 @@ a {
   border: 1px solid var(--border-color);
 }
 
+/*Feed*/
+.status-active {
+  background-color: var(--green);
+  color: var(--bg-body);
+}
+
+.status-complete {
+  background-color: var(--cyan);
+  color: var(--bg-body);
+}
+
+.status-default {
+  background-color: var(--text-muted);
+  color: var(--bg-body);
+}
+
+.feed-card-img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  display: block;
+}
+
+
+
+.project-hero-img {
+  max-width: 700px;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+}
+
+@media (max-width: 576px) {
+  header h1 {
+    font-size: 1.4rem;
+  }
+
+  header .navbar,
+  header nav {
+    font-size: 0.75rem;
+  }
+}
+
+.profile-avatar {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.card-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
 
 
 /* Crispy Forms*/
 
 .custom-file-input::file-selector-button {
   color: var(--bg-body) !important;
+}
+
+/* REMOVE BETA after BETA testsing */
+.beta-badge {
+  font-size: 0.4em;
+  background-color: var(--yellow);
+  color: var(--bg-body);
 }

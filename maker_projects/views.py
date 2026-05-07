@@ -124,14 +124,17 @@ def complete_project(request, pk):
 
     return render(request, "maker_projects/confirm_complete.html", {"project": project})
 
-
 def project_detail(request, pk):
     project = get_object_or_404(MakerProject.objects.select_related("owner"), pk=pk)
-
+    parts = (
+        project.parts
+        .select_related("component")
+        .prefetch_related("component__prices")
+    )
     return render(
         request,
         "maker_projects/project_detail.html",
-        {"project": project},
+        {"project": project, "parts": parts},
     )
 
 

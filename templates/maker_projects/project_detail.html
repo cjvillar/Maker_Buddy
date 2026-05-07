@@ -1,109 +1,115 @@
 {% extends "base.html" %}
-
+{% load humanize %}
 {% block content %}
-<div class="container-fluid justify-content-end">
-  <h1>{{ project.title | upper}}</h1>
-  <p>
-    Maker:
-    <a href="{% url 'accounts:profile' project.owner.username %}">
-      {{ project.owner.profile.display_name|default:project.owner.username }}
-    </a>
-  </p>
-
-  <p>
-    Created {{ project.created_at|date:"F j, Y" }} |
-    Due {{ project.due_date }}
-  </p>
-  <p class="badge badge-pill badge-success {{ project.status|lower }}">
-    Status: {{ project.status }}
-  </p>
-
-  <div>
-    {% if project.image %}
-    <img class="rounded" src="{{ project.image.url }}" alt="{{ project.title }}">
-    {% endif %}
+<div class="container py-4">
+  <div class="d-flex align-items-baseline gap-3 mb-1">
+    <h1 class="mb-0">{{ project.title|upper }}</h1>
+    <span class="badge rounded-pill bg-success">{{ project.status }}</span>
   </div>
 
-  <h3>Project Links: </h3>
-  <ul>
-
-    {% for link in project.links.all %}
-    <li>
-      <a href="{{ link.url }}" target="_blank" rel="noopener noreferrer">
-        {{ link.get_link_type_display }}
+  <div class="text-muted small mb-3 d-flex flex-wrap gap-3">
+    <span>Maker:
+      <a href="{% url 'accounts:profile' project.owner.username %}">
+        {{ project.owner.profile.display_name|default:project.owner.username }}
       </a>
-    </li>
-    {% endfor %}
-  </ul>
+    </span>
+    <span>Created {{ project.created_at|date:"F j, Y" }}</span>
+    <span>Due {{ project.due_date }}</span>
+  </div>
 
-  <section class=".container-md">
-    <h3>Goal: </h3>
-    <p>{{ project.goal }}</p>
-  </section>
+  {% if project.image %}
+  <div class="text-center mb-4">
+    <img class="project-hero-img" src="{{ project.image.url }}" alt="{{ project.title }}">
+  </div>
+  {% endif %}
 
-  <section class=".container-md">
-    <h3>Description: </h3>
-    <p>{{ project.description }}</p>
-  </section>
-  <br></br>
-  <section class="ProjectFeatures">
-    <h3>Project Features: </h3>
+  <div class="row g-3 mb-4">
 
-    <ul>
-      {% for ProjectFeature in project.features.all %}
-      <li>
-        <div class="ProjectFeature {% if ProjectFeature.is_complete %}done{% endif %}" id="ProjectFeature-{{ ProjectFeature.id }}">
-
-          <!-- <input type="checkbox" class="ProjectFeature-toggle" data-id="{{ ProjectFeature.id }}">
-          {% if ProjectFeature.is_complete%}checked{% endif %} </input> -->
-
-          <strong>{{ ProjectFeature.title }}</strong>
-          <p>{{ ProjectFeature.description }}</p>
-
-          <!-- {% if user == project.owner %}
-          <div class="ProjectFeature-actions">
-            <a href="{% url 'maker_projects:ProjectFeature_edit' ProjectFeature.pk %}">
-              Edit
-            </a>
-            |
-            <a href="{% url 'maker_projects:ProjectFeature_delete' ProjectFeature.pk %}">
-              Delete
-            </a>
-            {% endif %} -->
-          </div>
+    <!-- Goal: full width -->
+    <div class="col-12">
+      <div class="card h-100">
+        <div class="card-body">
+          <p class="text-muted small mb-1 text-uppercase fw-bold" style="letter-spacing:0.08em; font-size:11px;">Goal</p>
+          <p class="mb-0">{{ project.goal }}</p>
         </div>
-</div>
-</li>
-{% empty %}
-<li>No ProjectFeatures yet.</li>
-{% endfor %}
-</ul>
+      </div>
+    </div>
 
-<!-- {% if user == project.owner %}
-<a href="{% url 'maker_projects:ProjectFeature_create' project.pk %}">
-  + Add Project Feature
-</a>
-{% endif %} -->
-</section>
-<br></br>
-{% if user == project.owner %}
-<a href="{% url 'maker_projects:edit' project.pk %}">Edit</a> |
-<a href="{% url 'maker_projects:delete' project.pk %}">Delete</a>
+    <!-- Description: full width -->
+    <div class="col-12">
+      <div class="card h-100">
+        <div class="card-body">
+          <p class="text-muted small mb-1 text-uppercase fw-bold" style="letter-spacing:0.08em; font-size:11px;">Description</p>
+          <p class="mb-0">{{ project.description }}</p>
+        </div>
+      </div>
+    </div>
 
-{% if project.status == "active" %}
-| <a href="{% url 'maker_projects:confirm_complete' project.pk %}">Complete</a>
-{% endif %}
+    <!-- Links: half width -->
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-body">
+          <p class="text-muted small mb-1 text-uppercase fw-bold" style="letter-spacing:0.08em; font-size:11px;">Project Links</p>
+          {% if project.links.all %}
+          <ul class="mb-0 ps-3">
+            {% for link in project.links.all %}
+            <li>
+              <a href="{{ link.url }}" target="_blank" rel="noopener noreferrer">
+                {{ link.get_link_type_display }}
+              </a>
+            </li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <p class="text-muted mb-0 fst-italic">No links added.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
 
-{% endif %}
+    <!-- Features: half width -->
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-body">
+          <p class="text-muted small mb-1 text-uppercase fw-bold" style="letter-spacing:0.08em; font-size:11px;">Features</p>
+          {% if project.features.all %}
+          <ul class="mb-0 ps-3">
+            {% for feature in project.features.all %}
+            <li class="{% if feature.is_complete %}text-muted{% endif %}">
+              <strong>{{ feature.title }}</strong>
+              {% if feature.description %}
+              <p class="mb-1 small">{{ feature.description }}</p>
+              {% endif %}
+            </li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <p class="text-muted mb-0 fst-italic">No features added yet.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
 
-<br></br>
+  </div>
 
-<form action="{% url 'maker_projects:project_like' project.pk %}" method="post">
-  {% csrf_token %}
-  <button class="btn btn-primary" type="submit">
-    LIKES <span class="badge badge-light"> {{ project.likes.count }} </span>
-  </button>
-</form>
+  {% if user == project.owner %}
+  <div class="d-flex gap-2 mb-4">
+    <a href="{% url 'maker_projects:edit' project.pk %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+    <a href="{% url 'maker_projects:delete' project.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+    {% if project.status == "active" %}
+    <a href="{% url 'maker_projects:confirm_complete' project.pk %}" class="btn btn-sm btn-outline-warning">Complete</a>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  {% include "maker_parts/project_detail_bom_snippet.html" %}
+
+  <form action="{% url 'maker_projects:project_like' project.pk %}" method="post">
+    {% csrf_token %}
+    <button class="btn btn-primary" type="submit">
+      LIKES <span class="badge badge-light"> {{ project.likes.count }} </span>
+    </button>
+  </form>
 
 </div>
 {% endblock %}
