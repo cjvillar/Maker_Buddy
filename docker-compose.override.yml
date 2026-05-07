@@ -1,0 +1,11 @@
+services:
+  web:
+    volumes:
+      - .:/app          
+      - media_files:/app/media
+    environment:
+      DEBUG: "1"
+    command: >
+      sh -c "python manage.py migrate --noinput &&
+             python manage.py createcachetable &&
+             python manage.py runserver 0.0.0.0:8000"

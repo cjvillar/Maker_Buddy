@@ -1,48 +1,58 @@
 {% extends "base.html" %}
-{% block content %}
 {% load static %}
+{% block content %}
 
+<div class="container py-4">
+  <div class="d-flex align-items-center gap-4 mb-4">
+    {% if profile_user.profile.profile_pic %}
+    <img class="profile-avatar" src="{{ profile_user.profile.profile_pic.url }}" alt="{{ profile_user.profile.display_name }}">
+    {% else %}
+    <img class="profile-avatar" src="{% static 'images/default_profile.png' %}" alt="Default profile">
+    {% endif %}
 
-<div class="container-fluid justify-content-end">
-  {% if profile_user.profile.profile_pic %}
-  <img class="rounded" src="{{ profile_user.profile.profile_pic.url }}">
-  {% else %}
-  <img  class="rounded" src="{% static 'images/default_profile.png' %}" alt="Default profile">
-  {% endif %}
-  <br><br>
-  <h1>{{ profile_user.profile.display_name}}</h1>
-  <div class="bio">
-    <p>{{ profile_user.profile.bio }}</p>
-    <br><br>
-
-    <h2>Awards</h2>
-    <ul>
-      {% for ua in user_awards %}
-      <li>
-        <strong>{{ ua.award.name }}</strong> - {{ ua.award.description }}
-      </li>
-      {% empty %}
-      <li>No awards yet. Keep making!</li>
-      {% endfor %}
-    </ul>
-
-
+    <div>
+      <h1 class="mb-1">{{ profile_user.profile.display_name }}</h1>
+      <p class="text-muted mb-0">{{ profile_user.profile.bio }}</p>
+    </div>
   </div>
 
-  {% if projects %}
-  <h2>Current Project: </h2>
-  <ul>
-    {% for project in projects %}
-    <!-- TODO: add logic to get current pproject -->
-    <strong><a href="{% url 'maker_projects:detail' project.pk %}">
-        {{ project.title }} :
-      </a></strong>
-    {{ project.description |truncatechars:20 }}
-    {% endfor %}
-  </ul>
-  {% else %}
-  <p>No projects yet.</p>
-  {% endif %}
+  <div class="row g-3">
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-body">
+          <p class="card-label">Awards</p>
+          <ul class="mb-0 ps-3">
+            {% for ua in user_awards %}
+            <li><strong>{{ ua.award.name }}</strong> — {{ ua.award.description }}</li>
+            {% empty %}
+            <li class="text-muted fst-italic">No awards yet. Keep making!</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
 
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-body">
+          <p class="card-label">Projects</p>
+          {% if projects %}
+          <ul class="mb-0 ps-3">
+            {% for project in projects %}
+            <li>
+              <a href="{% url 'maker_projects:detail' project.pk %}">{{ project.title }}</a>
+              <span class="text-muted small">— {{ project.description|truncatechars:40 }}</span>
+            </li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <p class="text-muted fst-italic mb-0">No projects yet.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+  </div>
 </div>
+
 {% endblock %}

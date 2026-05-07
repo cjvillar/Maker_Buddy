@@ -5,13 +5,12 @@ from maker_projects.models import MakerProject, ProjectLike
 from django.db import IntegrityError
 
 
-
 class CreateProjectTests(TestCase):
     def setUp(self):
         self.user = User.objects.create_user("test_user", password="pass")
         self.client.login(username="test_user", password="pass")
 
-    def test_create_project(self): 
+    def test_create_project(self):
         project = MakerProject.objects.create(
             owner=self.user,
             title="My First Project",
@@ -71,5 +70,7 @@ class ProjectDetailTests(TestCase):
         url = reverse("maker_projects:detail", args=[self.project.pk])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "TEST PROJECT") # template forces uppercase
-        self.assertRegex(response.content.decode(), r"LIKES\s*<span.*>.*1.*</span>") # gets likes count from the bootstrap baadge
+        self.assertContains(response, "TEST PROJECT")  # template forces uppercase
+        self.assertRegex(
+            response.content.decode(), r"LIKES\s*<span.*>.*1.*</span>"
+        )  # gets likes count from the bootstrap baadge

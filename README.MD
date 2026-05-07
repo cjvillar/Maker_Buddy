@@ -148,8 +148,55 @@ ProjectLink.objects.filter(link_type="github")
 * To reset database:
 
 ```bash
-docker compose down -v
+docker-compose down
+docker-compose up --build
 ```
+
+
+### Maker_Parts Tasks
+
+1. Add parts to maker_parts/data/seed_parts.json
+
+
+Test getting parts to list:
+```bash
+python manage.py seed_parts --file maker_parts/data/seed_parts.json --dry-run
+```
+Run:
+```bash
+python manage.py seed_parts --file maker_parts/data/seed_parts.json
+```
+
+
+Test enqueue_weekly_sync:
+
+```bash
+docker exec -it maker_buddy-web-1 python manage.py enqueue_weekly_sync
+```
+Check for Ready:
+
+```bash
+docker exec -it maker_buddy-web-1 python manage.py shell -c "
+from django_tasks_db.models import DBTaskResult
+print(DBTaskResult.objects.all().values('id', 'status', 'task_path').last())
+"
+```
+Run
+```bash
+docker exec -it maker_buddy-web-1 python manage.py db_worker
+```
+
+```bash
+docker logs maker_buddy-web-1 --tail 50
+```
+
+
+
+Running docker:
+```bash
+docker exec -it maker_buddy-web-1 python manage.py seed_parts --file maker_parts/data/seed_parts.json
+```
+
 
 ---
 
