@@ -21,4 +21,4 @@ class Command(BaseCommand):
         result = weekly_sync_all_parts.enqueue()
         self.stdout.write(
             self.style.SUCCESS(f"Enqueued weekly sync. Task id: {result.id}")
-    )
+        )

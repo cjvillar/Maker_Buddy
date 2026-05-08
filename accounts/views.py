@@ -24,6 +24,7 @@ from allauth.socialaccount.models import SocialAccount
 #             messages.success(self.request, "YOU GOOD BRAH")
 #         return response
 
+
 def signup(request):
     if request.method == "POST":
         form = UserCreationForm(request.POST)
@@ -71,17 +72,19 @@ def edit_profile(request):
     return render(request, "account/edit_profile.html", {"form": form})
 
 
-
 @login_required
 def delete_profile(request):
     if request.method == "POST":
         user = request.user
-        SocialAccount.objects.filter(user=user).delete()  # removes github/google connections
-        EmailAddress.objects.filter(user=user).delete()   # removes allauth email records
-        user.delete()                                      # deletes user and profile
+        SocialAccount.objects.filter(
+            user=user
+        ).delete()  # removes github/google connections
+        EmailAddress.objects.filter(user=user).delete()  # removes allauth email records
+        user.delete()  # deletes user and profile
         return redirect("account_login")
-    
+
     return render(request, "account/delete_profile.html")
+
 
 def unauthorized(request):
     return render(request, "account/unauthorized.html")

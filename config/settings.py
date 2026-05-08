@@ -16,7 +16,6 @@ from dotenv import load_dotenv
 from django.utils.csp import CSP
 
 
-
 # find/load .env file
 if os.path.exists(".env"):
     load_dotenv(".env", override=False)
@@ -64,22 +63,17 @@ INSTALLED_APPS = [
     "django_tasks",
     "django_tasks_db",
     "django.contrib.humanize",
-
-
-
     # third-party
     "django_bootstrap5",
     "crispy_forms",
     "crispy_bootstrap5",
     "formtools",
-
     # allAuth
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.github",
-
     # local apps
     "accounts.apps.AccountsConfig",
     "maker_projects",
@@ -126,13 +120,10 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of `allauth`
-    'django.contrib.auth.backends.ModelBackend',
-
+    "django.contrib.auth.backends.ModelBackend",
     # `allauth` specific authentication methods, such as login by email
-    'allauth.account.auth_backends.AuthenticationBackend',
+    "allauth.account.auth_backends.AuthenticationBackend",
 ]
-
-
 
 
 # Database
@@ -141,6 +132,7 @@ _database_url = os.environ.get("DATABASE_URL")
 
 if _database_url:
     import urllib.parse
+
     _parsed = urllib.parse.urlparse(_database_url)
     DATABASES = {
         "default": {
@@ -162,23 +154,21 @@ else:
     }
 
 
-
-
 # Maker_Parts Tasks
-DIGIKEY_CLIENT_ID     = os.environ.get("DIGIKEY_CLIENT_ID")
+DIGIKEY_CLIENT_ID = os.environ.get("DIGIKEY_CLIENT_ID")
 DIGIKEY_CLIENT_SECRET = os.environ.get("DIGIKEY_CLIENT_SECRET")
 
 CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
-        'LOCATION': 'makerbuddy_cache',
+    "default": {
+        "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+        "LOCATION": "makerbuddy_cache",
     }
-}   
+}
 
 TASKS = {
-    "default" : {
+    "default": {
         "BACKEND": "django_tasks_db.DatabaseBackend",
-        "QUEUES":["default"],
+        "QUEUES": ["default"],
     }
 }
 
@@ -279,7 +269,7 @@ SECURE_CSP = {
 }
 
 
-#allAuth stuff:
+# allAuth stuff:
 
 SOCIALACCOUNT_ONLY = True
 
@@ -289,23 +279,23 @@ LOGOUT_REDIRECT_URL = "/"
 ACCOUNT_LOGOUT_REDIRECT_URL = "/"
 LOGIN_URL = "account_login"
 
-ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https" 
-SOCIALACCOUNT_LOGIN_ON_GET = True       
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https"
+SOCIALACCOUNT_LOGIN_ON_GET = True
 
 # Account settings, * means req remove if optional
-#ACCOUNT_LOGIN_METHODS =  {"email"}
-#ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
-#ACCOUNT_EMAIL_VERIFICATION = "optional"  # "mandatory", "optional", or "none"
-ACCOUNT_EMAIL_VERIFICATION = 'none'
+# ACCOUNT_LOGIN_METHODS =  {"email"}
+# ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
+# ACCOUNT_EMAIL_VERIFICATION = "optional"  # "mandatory", "optional", or "none"
+ACCOUNT_EMAIL_VERIFICATION = "none"
 
 SOCIALACCOUNT_ADAPTER = "accounts.adapter.GitHubWhitelistAdapter"
 ALLOWED_GITHUB_USERNAMES = {"cjvillar"}
 
-# Social account settings in ENV 
+# Social account settings in ENV
 SOCIALACCOUNT_PROVIDERS = {
     "google": {
         "APP": {
-            "client_id": os.environ.get("GOOGLE_CLIENT_ID"),      
+            "client_id": os.environ.get("GOOGLE_CLIENT_ID"),
             "secret": os.environ.get("GOOGLE_CLIENT_SECRET"),
             "key": "",
         },
@@ -317,7 +307,7 @@ SOCIALACCOUNT_PROVIDERS = {
         "APP": {
             "client_id": os.environ.get("GITHUB_CLIENT_ID"),
             "secret": os.environ.get("GITHUB_CLIENT_SECRET"),
-            "key": "", #gihub does not use
+            "key": "",  # gihub does not use
         },
         "SCOPE": [],
     },

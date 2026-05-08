@@ -197,7 +197,6 @@ Running docker:
 docker exec -it maker_buddy-web-1 python manage.py seed_parts --file maker_parts/data/seed_parts.json
 ```
 
-
 ---
 
 ## Future Improvements
