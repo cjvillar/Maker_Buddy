@@ -1,7 +1,7 @@
 {% load humanize %}
 {% load parts_tags %}
 
-<section class="mt-4">
+<section class="mt-4" id="bom">
   <div class="d-flex justify-content-between align-items-center mb-2">
     <h3 class="mb-0">Parts List</h3>
     {% if user == project.owner %}
@@ -28,7 +28,7 @@
       </thead>
       <tbody>
         {% for pp in parts %}
-        <!-- {% with price=pp.component.latest_price %} -->
+       
         <tr>
           <td>
             <code>{{ pp.component.digikey_part_number }}</code>
@@ -68,7 +68,7 @@
           </td>
           {% endif %}
         </tr>
-        {% endwith %}
+      
         {% endfor %}
       </tbody>
       <tfoot >

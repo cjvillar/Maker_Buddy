@@ -184,9 +184,9 @@ a {
 
 .project-hero-img {
   max-width: 700px;
+  max-height: 400px; 
   width: 100%;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
+  object-fit: contain;
   border-radius: 12px;
   border: 1px solid var(--border-color);
 }

@@ -8,6 +8,7 @@ from django.db import IntegrityError
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import ListView, View
+from django.urls import reverse
 
 from .models import Component, ProjectPart
 
@@ -83,7 +84,8 @@ class AddToProjectView(LoginRequiredMixin, View):
                 notes=notes,
             )
             messages.success(
-                request, f'{component.manufacturer_pn} added to "{project.title}".'
+                request,
+                f'{component.manufacturer} {component.manufacturer_pn} added to "{project.title}".',
             )
         except IntegrityError:
             messages.info(
@@ -111,4 +113,7 @@ class RemoveFromProjectView(LoginRequiredMixin, View):
         part_name = project_part.component.manufacturer_pn
         project_part.delete()
         messages.success(request, f'{part_name} removed from "{project.title}".')
-        return redirect("maker_projects:detail", pk=project.pk)
+        # return redirect("maker_projects:detail", pk=project.pk)
+        return redirect(
+            reverse("maker_projects:detail", kwargs={"pk": project.pk}) + "#bom"
+        )
