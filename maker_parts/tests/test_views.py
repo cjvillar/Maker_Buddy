@@ -64,17 +64,27 @@ class AddToProjectViewTests(TestCase):
             status="active",
         )
 
-    def _post(self, quantity=1, notes=""):
+    def _post(self, quantity=1, notes="", project_id=None):
+        data = {
+            "quantity": quantity,
+            "notes": notes,
+            "next": "/parts/",
+            "project_id": project_id or self.project.pk,
+        }
         return self.client.post(
             reverse("maker_parts:add_to_project", args=[self.component.pk]),
-            {"quantity": quantity, "notes": notes, "next": "/parts/"},
+            data,
         )
 
     def test_no_active_project_redirects_with_warning(self):
         self.project.status = "completed"
         self.project.save()
-        resp = self._post()
-        self.assertRedirects(resp, reverse("maker_parts:component_list"))
+        # posting without a valid project_id now returns 404
+        resp = self.client.post(
+            reverse("maker_parts:add_to_project", args=[self.component.pk]),
+            {"quantity": 1, "notes": "", "next": "/parts/"},
+        )
+        self.assertEqual(resp.status_code, 404)
 
 
 class RemoveFromProjectViewTests(TestCase):
