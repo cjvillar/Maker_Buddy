@@ -5,9 +5,9 @@
   <div class="d-flex justify-content-between align-items-center mb-2">
     <h3 class="mb-0">Parts List</h3>
     {% if user == project.owner %}
-    <a href="{% url 'maker_parts:component_list' %}" class="btn btn-outline-primary btn-sm">
-      <i class="fa-solid fa-plus me-1"></i>Add Parts
-    </a>
+  <a href="{% url 'maker_parts:component_list' %}?project_id={{ project.pk }}" class="btn btn-outline-primary btn-sm">
+    <i class="fa-solid fa-plus me-1"></i>Add Parts
+  </a>
     {% endif %}
   </div>
 
@@ -93,7 +93,7 @@
   {% else %}
   <p class="text-muted">
     No parts added yet.
-    <a href="{% url 'maker_parts:component_list' %}">Browse the catalog</a>.
+    <a href="{% url 'maker_parts:component_list' %}?project_id={{ project.pk }}">Browse the catalog</a>.
   </p>
   {% endif %}
   {% endwith %}
