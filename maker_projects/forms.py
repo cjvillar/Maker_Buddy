@@ -24,7 +24,7 @@ class ProjectMediaGoalForm(forms.ModelForm):
         model = MakerProject
         fields = ["image", "goal"]
         widgets = {
-            "image": forms.ClearableFileInput(
+            "image": forms.FileInput(
                 attrs={
                     "class": "form-control custom-file-input",
                     "accept": "image/*",
@@ -41,7 +41,7 @@ class MakerProjectForm(forms.ModelForm):
             "due_date": forms.DateInput(
                 attrs={"type": "date", "class": "form-control"}
             ),
-            "image": forms.ClearableFileInput(
+            "image": forms.FileInput(  # was ClearableFileInput but this has default clear widget I dont want
                 attrs={"class": "form-control custom-file-input", "accept": "image/*"}
             ),
         }
@@ -58,8 +58,10 @@ class ProjectLinkForm(forms.ModelForm):
         model = ProjectLink
         fields = ["url"]
 
+    url = forms.URLField(required=False)
+
     def clean_url(self):
-        url = self.cleaned_data["url"]
-        if not url.startswith("https://"):
+        url = self.cleaned_data.get("url", "")
+        if url and not url.startswith("https://"):
             raise forms.ValidationError("Links must use HTTPS")
         return url

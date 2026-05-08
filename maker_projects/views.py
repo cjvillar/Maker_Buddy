@@ -58,7 +58,7 @@ class CreateProjectWizard(LoginRequiredMixin, SessionWizardView):
             ProjectFeature.objects.create(project=project, **feature_data)
 
         link_data = form_list[4].cleaned_data
-        if link_data:
+        if link_data.get("url"):
             ProjectLink.objects.create(project=project, **link_data)
 
         return redirect("accounts:profile", self.request.user.username)
@@ -74,8 +74,10 @@ def edit_project(request, pk):
         MakerProject,
         ProjectLink,
         form=ProjectLinkForm,
-        extra=1,  # show one empty form for adding a new link
-        can_delete=True,  # enables deleting existing links
+        extra=1,
+        can_delete=True,
+        min_num=0,
+        validate_min=False,
     )
 
     if request.method == "POST":
