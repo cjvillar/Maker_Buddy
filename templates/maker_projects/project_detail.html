@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load humanize %}
 {% block content %}
-<div class="container py-4">
+
   <div class="d-flex align-items-baseline gap-3 mb-1">
     <h1 class="mb-0">{{ project.title|upper }}</h1>
     <span class="badge rounded-pill bg-success">{{ project.status }}</span>
@@ -111,5 +111,5 @@
     </button>
   </form>
 
-</div>
+
 {% endblock %}
