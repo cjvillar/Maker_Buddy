@@ -1,4 +1,4 @@
-/* Base Reset  Variables */
+/* Base Reset Variables */
 *,
 *::before,
 *::after {
@@ -7,171 +7,161 @@
   padding: 0;
 }
 
-/* Import from Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet');
-
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;700&display=swap');
 
 :root {
-
   --font-header: 'IBM Plex Sans', sans-serif;
   --font-body: 'IBM Plex Sans', sans-serif;
   --font-mono: 'IBM Plex Mono', monospace;
 
+  --accent: #16A34A;
+  --accent-hover: #15803D;
+  --danger: #DC2626;
+  --warning: #D97706;
+  --info: #0284C7;
+  --orange: #EA580C;
 
-  /* The "Command Center" Blue - sophisticated but technical */
-  --primary: #334BCB;
-  --primary-hover: #26389D;
+  /* Light theme (default) */
+  --bg-body: #F8F9FA;
+  --bg-card: #FFFFFF;
+  --bg-header: #FFFFFF;
+  --text-main: #1A1A1A;
+  --text-muted: #6B7280;
+  --border-color: #E5E7EB;
+  --code-bg: #F3F4F6;
+  --table-header-bg: #F3F4F6;
+  --table-header-color: #1A1A1A;
+  --card-shadow: 0 1px 3px rgba(0,0,0,0.06);
 
-  /* Deep Charcoal with a hint of warm "Bakelite" brown */
-  --bg-body: #161714;
-  --bg-card: #1C1E1B;
-
-  /* Off-whites and Muted Grays for that vintage manual feel */
-  --text-main: #ECE9E0;
-  --text-muted: #8E9185;
-  --border-color: #2D312C;
-
-  /* MCM Hardware Accents - desaturated but vibrant */
-  --green: #4D8B31;
-  /* Vintage machinery green */
-  --yellow: #D9A01B;
-  /* Harvest gold / Brass pulse */
-  --red: #B91C1C;
-  /* Emergency stop button red */
-  --cyan: #56B3B4;
-  /* Retro oscilloscope teal */
-  --orange: #D35400;
-  /* The classic Eames/Herman Miller Orange */
-
-  /* ---- Bootstrap theme variables ---- */
-  --bs-primary: var(--primary);
-  --bs-primary-rgb: 194, 0, 32;
-
+  /* Bootstrap overrides */
   --bs-body-bg: var(--bg-body);
   --bs-body-color: var(--text-main);
-
   --bs-secondary-color: var(--text-muted);
   --bs-border-color: var(--border-color);
-
   --bs-card-bg: var(--bg-card);
   --bs-card-border-color: var(--border-color);
-
-  --bs-link-color: var(--cyan);
-  --bs-link-hover-color: var(--primary-hover);
-
-  --bs-success: var(--green);
-  --bs-warning: var(--yellow);
-  --bs-danger: var(--red);
-  --bs-info: var(--cyan);
-
-  --bs-success-rgb: 0, 172, 91;
-  --bs-warning-rgb: 255, 215, 0;
-  --bs-danger-rgb: 255, 0, 0;
-  --bs-info-rgb: 0, 255, 255;
+  --bs-link-color: var(--accent);
+  --bs-link-hover-color: var(--accent-hover);
+  --bs-success: var(--accent);
+  --bs-warning: var(--warning);
+  --bs-danger: var(--danger);
+  --bs-info: var(--info);
 }
 
+[data-theme="dark"] {
+  --bg-body: #0F1010;
+  --bg-card: #1A1B1A;
+  --bg-header: #1A1B1A;
+  --text-main: #F0EDE6;
+  --text-muted: #6B7280;
+  --border-color: #2A2D29;
+  --code-bg: #2A2D29;
+  --table-header-bg: #111312;
+  --table-header-color: #F0EDE6;
+  --card-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
 
 body {
   color: var(--text-main);
   background-color: var(--bg-body);
   font-family: var(--font-body);
   font-size: clamp(16px, 1.2vw, 18px);
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-h1 {
-  color: var(--green);
-  font-weight: bolder;
-}
-
-h2 {
+h1, h2, h3, h4 {
   color: var(--text-main);
-  
-}
-
-h3 {
-  color: var(--yellow);
-}
-
-h1,
-h2,
-h3,
-.btn {
   font-family: var(--font-header);
+  font-weight: 700;
   letter-spacing: -0.02em;
 }
 
-body,
-p,
-code {
+p, body {
   font-family: var(--font-body);
+  color: var(--text-main);
+}
+
+code {
+  font-family: var(--font-mono);
+  background-color: var(--code-bg);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.875em;
   color: var(--text-main);
 }
 
 a {
   text-decoration: none;
-  color: var(--green);
+  color: var(--accent);
+}
+
+a:hover {
+  color: var(--accent-hover);
 }
 
 .table td,
 .table th {
   color: var(--text-main);
+  border-color: var(--border-color);
 }
 
-/*Search magnifying glass */
+/* Override Bootstrap table-light/table-dark with theme vars */
+.thead-theme th {
+  background-color: var(--table-header-bg) !important;
+  color: var(--table-header-color) !important;
+  border-color: var(--border-color) !important;
+}
+
+.table {
+  --bs-table-bg: var(--bg-card);
+  --bs-table-border-color: var(--border-color);
+  --bs-table-hover-bg: var(--code-bg);
+}
+
 .fa-magnifying-glass {
   color: var(--text-muted);
 }
 
 .btn-primary {
-  background-color: var(--orange);
-  border-color: var(--orange);
-
+  background-color: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
 }
 
 .btn-primary:hover {
-  background-color: var(--orange) !important;
-  border-color: var(--primary-hover) !important;
-
+  background-color: var(--accent-hover) !important;
+  border-color: var(--accent-hover) !important;
 }
-
 
 .card {
   background-color: var(--bg-card);
-  justify-content: center;
+  border-color: var(--border-color);
+  box-shadow: var(--card-shadow);
+}
+
+header {
+  background-color: var(--bg-header);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .title-link {
   color: inherit;
-  /* Takes the color of the parent h tag */
   text-decoration: none;
-  /
-
 }
 
-.img {
-  width: 50%;          
-  aspect-ratio: 16 / 9;  
-  object-fit: cover;     
-  object-position: center; 
-  
-  border-radius: 20px;    
-  border: 1px solid var(--border-color);
-}
-
-/*Feed*/
 .status-active {
-  background-color: var(--green);
-  color: var(--bg-body);
+  background-color: var(--accent);
+  color: #fff;
 }
 
 .status-complete {
-  background-color: var(--cyan);
-  color: var(--bg-body);
+  background-color: var(--info);
+  color: #fff;
 }
 
 .status-default {
   background-color: var(--text-muted);
-  color: var(--bg-body);
+  color: #fff;
 }
 
 .feed-card-img {
@@ -183,37 +173,13 @@ a {
   display: block;
 }
 
-
-
 .project-hero-img {
   max-width: 700px;
-  max-height: 400px; 
+  max-height: 400px;
   width: 100%;
   object-fit: contain;
   border-radius: 12px;
   border: 1px solid var(--border-color);
-}
-
-/* mobile */
-@media (max-width: 768px) {
-  h1 { font-size: 1.5rem; }
-  h2 { font-size: 1.25rem; }
-  h3 { font-size: 1.1rem; }
-
-  .btn {
-    min-height: 44px; /* Apple tap target size */
-  }
-
-  .project-hero-img {
-    max-width: 100%;
-    border-radius: 8px;
-  }
-
-  /* Remove double container padding on mobile */
-  .container, .container-fluid {
-    padding-left: 12px;
-    padding-right: 12px;
-  }
 }
 
 .profile-avatar {
@@ -234,17 +200,43 @@ a {
   margin-bottom: 8px;
 }
 
-
-
-/* Crispy Forms*/
-
-.custom-file-input::file-selector-button {
-  color: var(--bg-body) !important;
-}
-
-/* REMOVE BETA after BETA testsing */
 .beta-badge {
   font-size: 0.4em;
-  background-color: var(--yellow);
-  color: var(--bg-body);
+  background-color: var(--warning);
+  color: #fff;
+}
+
+/* light/dark theme toggle button */
+#theme-toggle {
+  background: none;
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  border-radius: 6px;
+  padding: 4px 8px;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+#theme-toggle:hover {
+  color: var(--text-main);
+  border-color: var(--text-muted);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  h1 { font-size: 1.5rem; }
+  h2 { font-size: 1.25rem; }
+  h3 { font-size: 1.1rem; }
+
+  .btn { min-height: 44px; }
+
+  .project-hero-img {
+    max-width: 100%;
+    border-radius: 8px;
+  }
+
+  .container, .container-fluid {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
 }
