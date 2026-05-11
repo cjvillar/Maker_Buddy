@@ -3,16 +3,25 @@
 {% load humanize %}
 
 {% block content %}
-<div class="container-fluid">
+<div class="container-fluid px-4">
 
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h1 class="mb-0">Parts Catalog</h1>
-    {% if default_project %}
-    <a href="{% url 'maker_projects:detail' default_project.pk %}#bom" class="badge bg-success fs-6 text-decoration-none">
-      <i class="fa-solid fa-folder-open me-1"></i>{{ default_project.title }}
+    {% if active_project %}
+    <a href="{% url 'maker_projects:detail' active_project.pk %}#bom"
+      class="badge bg-success fs-6 text-decoration-none px-3 py-2">
+      <i class="fa-solid fa-folder-open me-1"></i>{{ active_project.title }}
     </a>
     {% endif %}
   </div>
+
+  {% if not active_project %}
+  <div class="alert alert-warning d-flex align-items-center gap-2">
+    <i class="fa-solid fa-triangle-exclamation"></i>
+    You need an active project to add parts.
+    <a href="{% url 'maker_projects:create_project' %}" class="alert-link ms-1">Create one</a>.
+  </div>
+  {% endif %}
 
   {# Messages #}
   {% for message in messages %}
@@ -26,6 +35,7 @@
   </div>
   {% endfor %}
 
+  {# Search / filter bar #}
   <form method="get" class="row g-2 mb-4">
     <div class="col-md-5">
       <div class="input-group">
@@ -45,7 +55,7 @@
     <div class="col-auto d-flex gap-2">
       <button type="submit" class="btn btn-primary">Search</button>
       {% if q or category %}
-      <a href="{% url 'maker_parts:component_list' %}{% if default_project %}?project_id={{ default_project.pk }}{% endif %}" class="btn btn-outline-secondary">
+      <a href="{% url 'maker_parts:component_list' %}" class="btn btn-outline-secondary">
         <i class="fa-solid fa-xmark me-1"></i>Clear
       </a>
       {% endif %}
@@ -63,12 +73,12 @@
       <thead class="table-dark">
         <tr>
           <th>Part Number</th>
-          <th>Manufacturer</th>
+          <th class="d-none d-md-table-cell">Manufacturer</th>
           <th>Description</th>
-          <th>Category</th>
+          <th class="d-none d-md-table-cell">Category</th>
           <th class="text-end">Unit Price</th>
-          <th class="text-end">Stock</th>
-          {% if default_project %}<th class="text-center">Add to Project</th>{% endif %}
+          <th class="d-none d-md-table-cell text-end">Stock</th>
+          {% if default_project %}<th class="text-center">Add</th>{% endif %}
         </tr>
       </thead>
       <tbody>
@@ -89,9 +99,9 @@
             </span>
             {% endif %}
           </td>
-          <td class="small">{{ component.manufacturer }}</td>
+          <td class="d-none d-md-table-cell small">{{ component.manufacturer }}</td>
           <td class="text-muted small">{{ component.description|truncatewords:12 }}</td>
-          <td><span>{{ component.category }}</span></td>
+          <td class="d-none d-md-table-cell"><span>{{ component.category }}</span></td>
           <td class="text-end">
             {% if price and price.unit_price %}
             <strong>${{ price.unit_price|floatformat:2 }}</strong>
@@ -99,7 +109,7 @@
             <span class="text-muted">—</span>
             {% endif %}
           </td>
-          <td class="text-end">
+          <td class="d-none d-md-table-cell text-end">
             {% if price %}
             {% if price.stock_qty > 0 %}
             {{ price.stock_qty|intcomma }}
@@ -117,8 +127,8 @@
               {% csrf_token %}
               <input type="hidden" name="next" value="{{ request.get_full_path }}">
               <input type="hidden" name="project_id" value="{{ default_project.pk }}">
-              <input type="number" name="quantity" value="1" min="1" max="9999"
-                class="form-control form-control-sm" style="width: 70px;">
+              <input type="number" name="quantity" value="1" min="1" max="9999" class="form-control form-control-sm"
+                style="width: 60px;">
               <button type="submit" class="btn btn-sm btn-primary">
                 <i class="fa-solid fa-plus"></i>
               </button>
@@ -139,7 +149,7 @@
       {% if page_obj.has_previous %}
       <li class="page-item">
         <a class="page-link"
-          href="?{% if q %}q={{ q }}&{% endif %}{% if category %}category={{ category }}&{% endif %}{% if default_project %}project_id={{ default_project.pk }}&{% endif %}page={{ page_obj.previous_page_number }}">
+          href="?{% if q %}q={{ q }}&{% endif %}{% if category %}category={{ category }}&{% endif %}page={{ page_obj.previous_page_number }}">
           <i class="fa-solid fa-chevron-left"></i> Previous
         </a>
       </li>
@@ -150,7 +160,7 @@
       {% if page_obj.has_next %}
       <li class="page-item">
         <a class="page-link"
-          href="?{% if q %}q={{ q }}&{% endif %}{% if category %}category={{ category }}&{% endif %}{% if default_project %}project_id={{ default_project.pk }}&{% endif %}page={{ page_obj.next_page_number }}">
+          href="?{% if q %}q={{ q }}&{% endif %}{% if category %}category={{ category }}&{% endif %}page={{ page_obj.next_page_number }}">
           Next <i class="fa-solid fa-chevron-right"></i>
         </a>
       </li>
@@ -164,7 +174,7 @@
     <i class="fa-solid fa-magnifying-glass fa-2x mb-3 d-block"></i>
     <p>No parts found{% if q %} for "<strong>{{ q }}</strong>"{% endif %}.</p>
     {% if q or category %}
-    <a href="{% url 'maker_parts:component_list' %}{% if default_project %}?project_id={{ default_project.pk }}{% endif %}" class="btn btn-outline-secondary btn-sm">Clear filters</a>
+    <a href="{% url 'maker_parts:component_list' %}" class="btn btn-outline-secondary btn-sm">Clear filters</a>
     {% endif %}
   </div>
   {% endif %}
