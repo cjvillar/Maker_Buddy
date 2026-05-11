@@ -107,10 +107,11 @@ TEMPLATES = [
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
-                "django.template.context_processors.request",
-                "django.contrib.auth.context_processors.auth",
-                "django.contrib.messages.context_processors.messages",
-            ],
+            "django.template.context_processors.request",
+            "django.contrib.auth.context_processors.auth",
+            "django.contrib.messages.context_processors.messages",
+            "django.template.context_processors.csp",
+        ],
         },
     },
 ]
@@ -252,6 +253,7 @@ else:
 
 SECURE_CSP = {
     "default-src": [CSP.SELF],
+    "connect-src": [CSP.SELF, "https://cdn.jsdelivr.net"],
     "script-src": [
         CSP.SELF,
         CSP.NONCE,
@@ -263,8 +265,13 @@ SECURE_CSP = {
         CSP.NONCE,
         "https://cdn.jsdelivr.net",
         "https://stackpath.bootstrapcdn.com",
+        "https://fonts.googleapis.com",
     ],
-    "font-src": [CSP.SELF, "https://cdn.jsdelivr.net"],
+    "font-src": [
+        CSP.SELF,
+        "https://cdn.jsdelivr.net",
+        "https://fonts.gstatic.com",
+    ],
     "img-src": [CSP.SELF, "https:"],
 }
 

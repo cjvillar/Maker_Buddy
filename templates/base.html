@@ -2,33 +2,58 @@
 {% load django_bootstrap5 %}
 
 <!DOCTYPE html>
-<html lang="en" >
-
+<html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Maker Buddy</title>
 
   {% bootstrap_css %}
   {% bootstrap_javascript %}
 
   <link rel="stylesheet" href="{% static 'css/main.css' %}">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
   <link rel="stylesheet" href="{% static 'fontawesome/css/all.min.css' %}">
+
+ <script nonce="{{ csp_nonce }}">
+    const saved = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', saved);
+  </script>
 </head>
 <body>
 
 <header class="py-3">
-  <div class="container d-flex align-items-center justify-content-between flex-wrap gap-2">
+  <div class="container-fluid px-4 d-flex align-items-center justify-content-between flex-wrap gap-2">
     <h1 class="mb-0">Maker Buddy<sub><span class="badge beta-badge">BETA</span></sub></h1>
-    {% include 'navbar.html' %}
+    <div class="d-flex align-items-center gap-3">
+      {% include 'navbar.html' %}
+      <button id="theme-toggle" aria-label="Toggle theme">
+        <i class="fa-solid fa-moon" id="theme-icon"></i>
+      </button>
+    </div>
   </div>
 </header>
-
 
 <main class="py-4">
   {% block content %}{% endblock %}
 </main>
+
+<script nonce="{{ csp_nonce }}">
+  const toggle = document.getElementById('theme-toggle');
+  const icon = document.getElementById('theme-icon');
+
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+    icon.className = theme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+  }
+
+  applyTheme(localStorage.getItem('theme') || 'light');
+
+  toggle.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    applyTheme(current === 'dark' ? 'light' : 'dark');
+  });
+</script>
 
 </body>
 </html>
