@@ -12,7 +12,7 @@
             <span class="badge bg-success ms-2">Complete</span>
             {% endif %}
             {% if step.description %}
-            <p class="mb-0 mt-1 small text-muted">{{ step.description }}</p>
+            <p class="mb-0 mt-1 small text-muted">{{ step.description | linebreaksbr}}</p>
             {% endif %}
         </div>
         <a href="{% url 'maker_projects:build_step_edit' step.pk %}"
