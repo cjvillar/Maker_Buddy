@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container">
+
+    <form method="post">
+        <h2>Edit Build Step</h2>
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" name="action" value="save" class="btn btn-sm btn-outline-secondary">Save</button>
+        <button type="submit" name="action" value="delete"
+                class="btn btn-sm btn-outline-danger ms-2"
+                onclick="return confirm('Delete this step?')">
+            Delete
+        </button>
+        <a href="{% url 'maker_projects:detail' step.project.pk %}" class="btn btn-sm btn-link">Cancel</a>
+    </form>
+
+</div>
+{% endblock %}

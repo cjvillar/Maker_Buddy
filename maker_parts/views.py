@@ -58,9 +58,15 @@ class ComponentListView(LoginRequiredMixin, ListView):
 
         #  coming from a completed project
         selected_id = self.request.GET.get("project_id")
-        selected_project = next((p for p in all_projects if str(p.pk) == selected_id), None)
+        selected_project = next(
+            (p for p in all_projects if str(p.pk) == selected_id), None
+        )
 
-        default_project = selected_project or active_project or (completed_projects[0] if completed_projects else None)
+        default_project = (
+            selected_project
+            or active_project
+            or (completed_projects[0] if completed_projects else None)
+        )
 
         ctx["active_project"] = active_project
         ctx["default_project"] = default_project

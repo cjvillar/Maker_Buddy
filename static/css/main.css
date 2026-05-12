@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;700&display=swap');
+
 /* Base Reset Variables */
 *,
 *::before,
@@ -6,8 +8,6 @@
   margin: 0;
   padding: 0;
 }
-
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;700&display=swap');
 
 :root {
   --font-header: 'IBM Plex Sans', sans-serif;
@@ -239,4 +239,38 @@ header {
     padding-left: 12px;
     padding-right: 12px;
   }
+}
+
+/* Forms */
+[data-theme="dark"] .form-control,
+[data-theme="dark"] .form-select {
+    background-color: #1e1e1e;
+    color: #ffffff;
+    border-color: #444;
+}
+
+[data-theme="dark"] .form-control:focus,
+[data-theme="dark"] .form-select:focus {
+    background-color: #1e1e1e;
+    color: #ffffff;
+    border-color: #666;
+    box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .form-control:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px #1e1e1e inset;
+    -webkit-text-fill-color: #ffffff;
+}
+
+[data-theme="light"] .form-control,
+[data-theme="light"] .form-select {
+    background-color: #ffffff;
+    color: #212529;
+    border-color: #ced4da;
+}
+
+[data-theme="dark"] input[type="file"].form-control::file-selector-button {
+    background-color: #2e2e2e !important;
+    color: #aaaaaa !important;
+    border-color: #444 !important;
 }

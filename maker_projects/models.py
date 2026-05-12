@@ -146,21 +146,23 @@ class ProjectLike(models.Model):
         ]
 
 
-class ProjectFeature(models.Model):
+class BuildStep(models.Model):
     project = models.ForeignKey(
         MakerProject,
         on_delete=models.CASCADE,
-        related_name="features",
+        related_name="build_steps",
     )
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
+    order = models.PositiveIntegerField(default=0)
+    is_complete = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ["created_at"]
+        ordering = ["order", "created_at"]
 
     def __str__(self):
-        return self.title
+        return f"Step {self.order}: {self.title}"
 
 
 class ProjectRequirement(models.Model):
