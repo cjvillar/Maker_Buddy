@@ -86,7 +86,7 @@
             <li class="{% if step.is_complete %}text-muted{% endif %}">
               <strong>{{ step.title }}</strong>
               {% if step.description %}
-              <p class="mb-1 small">{{ step.description }}</p>
+              <p class="mb-1 small">{{ step.description | linebreaksbr }}</p>
               {% endif %}
             </li>
             {% endfor %}
