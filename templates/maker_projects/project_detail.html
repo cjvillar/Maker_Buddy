@@ -29,7 +29,8 @@
     <div class="col-12">
       <div class="card h-100">
         <div class="card-body">
-          <p class="text-muted small mb-1 text-uppercase fw-bold" style="letter-spacing:0.08em; font-size:11px;">Goal</p>
+          <p class="text-muted small mb-1 text-uppercase fw-bold" style="letter-spacing:0.08em; font-size:11px;">Goal
+          </p>
           <p class="mb-0">{{ project.goal }}</p>
         </div>
       </div>
@@ -39,17 +40,19 @@
     <div class="col-12">
       <div class="card h-100">
         <div class="card-body">
-          <p class="text-muted small mb-1 text-uppercase fw-bold" style="letter-spacing:0.08em; font-size:11px;">Description</p>
+          <p class="text-muted small mb-1 text-uppercase fw-bold" style="letter-spacing:0.08em; font-size:11px;">
+            Description</p>
           <p class="mb-0">{{ project.description }}</p>
         </div>
       </div>
     </div>
 
-    <!-- Links: half width -->
-    <div class="col-md-6">
+    <!-- Links: full width -->
+    <div class="col-12">
       <div class="card h-100">
         <div class="card-body">
-          <p class="text-muted small mb-1 text-uppercase fw-bold" style="letter-spacing:0.08em; font-size:11px;">Project Links</p>
+          <p class="text-muted small mb-1 text-uppercase fw-bold" style="letter-spacing:0.08em; font-size:11px;">Project
+            Links</p>
           {% if project.links.all %}
           <ul class="mb-0 ps-3">
             {% for link in project.links.all %}
@@ -67,24 +70,29 @@
       </div>
     </div>
 
-    <!-- Features: half width -->
-    <div class="col-md-6">
+
+    <!-- Parts list include -->
+    {% include "maker_parts/project_detail_bom_snippet.html" %}
+
+    <!-- Build Steps-->
+    <div class="col-12">
       <div class="card h-100">
         <div class="card-body">
-          <p class="text-muted small mb-1 text-uppercase fw-bold" style="letter-spacing:0.08em; font-size:11px;">Features</p>
-          {% if project.features.all %}
-          <ul class="mb-0 ps-3">
-            {% for feature in project.features.all %}
-            <li class="{% if feature.is_complete %}text-muted{% endif %}">
-              <strong>{{ feature.title }}</strong>
-              {% if feature.description %}
-              <p class="mb-1 small">{{ feature.description }}</p>
+          <p class="text-muted small mb-1 text-uppercase fw-bold" style="letter-spacing:0.08em; font-size:11px;">Build
+            Steps</p>
+          {% if project.build_steps.all %}
+          <ol class="mb-0 ps-3">
+            {% for step in project.build_steps.all %}
+            <li class="{% if step.is_complete %}text-muted{% endif %}">
+              <strong>{{ step.title }}</strong>
+              {% if step.description %}
+              <p class="mb-1 small">{{ step.description }}</p>
               {% endif %}
             </li>
             {% endfor %}
-          </ul>
+          </ol>
           {% else %}
-          <p class="text-muted mb-0 fst-italic">No features added yet.</p>
+          <p class="text-muted mb-0 fst-italic">No build steps added yet.</p>
           {% endif %}
         </div>
       </div>
@@ -101,8 +109,6 @@
     {% endif %}
   </div>
   {% endif %}
-
-  {% include "maker_parts/project_detail_bom_snippet.html" %}
 
   <form action="{% url 'maker_projects:project_like' project.pk %}" method="post">
     {% csrf_token %}

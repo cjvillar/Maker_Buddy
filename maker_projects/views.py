@@ -1,13 +1,15 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import MakerProject, ProjectFeature, ProjectLike
+from django.views.decorators.http import require_POST
+from .models import MakerProject, BuildStep, ProjectLike
 from .forms import (
     ProjectBasicForm,
     ProjectTimelineForm,
     ProjectMediaGoalForm,
     ProjectLinkForm,
     ProjectLink,
-    ProjectFeatureForm,
+    BuildStepForm,
+    BuildStepEditForm,
     MakerProjectForm,
 )
 from django.forms import inlineformset_factory
@@ -15,7 +17,6 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from formtools.wizard.views import SessionWizardView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render
 
 
 class CreateProjectWizard(LoginRequiredMixin, SessionWizardView):
@@ -24,13 +25,12 @@ class CreateProjectWizard(LoginRequiredMixin, SessionWizardView):
         ("basic", ProjectBasicForm),
         ("timeline", ProjectTimelineForm),
         ("media", ProjectMediaGoalForm),
-        ("feature", ProjectFeatureForm),
+        ("build_step", BuildStepForm),
         ("link", ProjectLinkForm),
     ]
 
     file_storage = FileSystemStorage(location=settings.MEDIA_ROOT)
 
-    # Check for active pprojects, only allow one
     def dispatch(self, request, *args, **kwargs):
         has_active = MakerProject.objects.filter(
             owner=request.user, status=MakerProject.Status.ACTIVE
@@ -40,22 +40,19 @@ class CreateProjectWizard(LoginRequiredMixin, SessionWizardView):
         return super().dispatch(request, *args, **kwargs)
 
     def done(self, form_list, **kwargs):
-        # Create new project
         project = MakerProject(
             owner=self.request.user, status=MakerProject.Status.ACTIVE
         )
 
-        # Merge first three forms (basic, timeline, media)
         for form in form_list[:3]:
             for field, value in form.cleaned_data.items():
                 setattr(project, field, value)
 
         project.save()
 
-        # Handle feature and link forms, TODO: Links still not optional must fix
-        feature_data = form_list[3].cleaned_data
-        if feature_data:
-            ProjectFeature.objects.create(project=project, **feature_data)
+        step_data = form_list[3].cleaned_data
+        if step_data.get("title"):
+            BuildStep.objects.create(project=project, order=0, **step_data)
 
         link_data = form_list[4].cleaned_data
         if link_data.get("url"):
@@ -67,8 +64,6 @@ class CreateProjectWizard(LoginRequiredMixin, SessionWizardView):
 @login_required
 def edit_project(request, pk):
     project = get_object_or_404(MakerProject, pk=pk, owner=request.user)
-
-    # https://docs.djangoproject.com/en/6.0/ref/forms/models/
 
     ProjectLinkFormSet = inlineformset_factory(
         MakerProject,
@@ -87,7 +82,6 @@ def edit_project(request, pk):
         if form.is_valid() and link_formset.is_valid():
             form.save()
             link_formset.save()
-
             return redirect("maker_projects:detail", pk=project.pk)
     else:
         form = MakerProjectForm(instance=project)
@@ -96,7 +90,12 @@ def edit_project(request, pk):
     return render(
         request,
         "maker_projects/edit_project.html",
-        {"form": form, "link_formset": link_formset, "project": project},
+        {
+            "form": form,
+            "link_formset": link_formset,
+            "step_form": BuildStepForm(),  # always a fresh blank form
+            "project": project,
+        },
     )
 
 
@@ -108,11 +107,7 @@ def delete_project(request, pk):
         project.delete()
         return redirect("accounts:profile", request.user.username)
 
-    return render(
-        request,
-        "maker_projects/confirm_delete.html",
-        {"project": project},
-    )
+    return render(request, "maker_projects/confirm_delete.html", {"project": project})
 
 
 @login_required
@@ -159,70 +154,43 @@ def add_project_link(request, project_id):
 
 
 @login_required
-def create_ProjectFeature(request, project_pk):
+@require_POST
+def add_build_step(request, project_pk):
     project = get_object_or_404(MakerProject, pk=project_pk, owner=request.user)
-
-    if request.method == "POST":
-        form = ProjectFeatureForm(request.POST)
-        if form.is_valid():
-            ProjectFeature = form.save(commit=False)
-            ProjectFeature.project = project
-            ProjectFeature.order = project.features.count()
-            ProjectFeature.save()
-            return redirect(
-                "maker_projects:detail", project.pk
-            )  # redirect user to feed after ProjectFeature created
-    else:
-        form = ProjectFeatureForm()
-
-    return render(
-        request,
-        "maker_projects/ProjectFeatures/create.html",
-        {"form": form, "project": project},
-    )
+    form = BuildStepForm(request.POST)
+    if form.is_valid():
+        step = form.save(commit=False)
+        step.project = project
+        step.order = project.build_steps.count()
+        step.save()
+    return redirect("maker_projects:edit", pk=project_pk)
 
 
 @login_required
-def edit_ProjectFeature(request, pk):
-    ProjectFeature = get_object_or_404(
-        ProjectFeature, pk=pk, project__owner=request.user
-    )
+def edit_build_step(request, pk):
+    step = get_object_or_404(BuildStep, pk=pk, project__owner=request.user)
+    project_pk = step.project.pk
 
     if request.method == "POST":
-        project_pk = ProjectFeature.project.pk
-        form = ProjectFeatureForm(request.POST, instance=ProjectFeature)
+        if request.POST.get("action") == "delete":
+            step.delete()
+            return redirect("maker_projects:detail", project_pk)
+
+        form = BuildStepEditForm(request.POST, instance=step)
         if form.is_valid():
             form.save()
             return redirect("maker_projects:detail", project_pk)
     else:
-        form = ProjectFeatureForm(instance=ProjectFeature)
+        form = BuildStepEditForm(instance=step)
 
     return render(
         request,
-        "maker_projects/ProjectFeatures/edit.html",
+        "maker_projects/build_steps/edit.html",
         {
             "form": form,
-            "ProjectFeature": ProjectFeature,
-            "project": ProjectFeature.project,
+            "step": step,
+            "project": step.project,
         },
-    )
-
-
-@login_required
-def delete_ProjectFeature(request, pk):
-    ProjectFeature = get_object_or_404(
-        ProjectFeature, pk=pk, project__owner=request.user
-    )
-
-    if request.method == "POST":
-        project_pk = ProjectFeature.project.pk
-        ProjectFeature.delete()
-        return redirect("maker_projects:detail", project_pk)
-
-    return render(
-        request,
-        "maker_projects/ProjectFeatures/confirm_delete.html",
-        {"ProjectFeature": ProjectFeature},
     )
 
 
@@ -233,7 +201,6 @@ def toggle_like(request, pk):
         user=request.user, project=project
     )
 
-    # unlike a project
     if not created:
         like.delete()
     return redirect(request.META.get("HTTP_REFERER", "home"))

@@ -1,20 +1,77 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-<div class="container">
-<form method="post" enctype="multipart/form-data">
-    <h1>Edit Project:</h1>
-    {% csrf_token %}
-    {{ form|crispy }}
-    <h3>Project Links (Edit, Add, or Delete):</h3>
-    {{ link_formset.management_form }}
-    {% for link in link_formset %}
-    <div class="link-form">
-        {{ link|crispy }}
+
+{% partialdef step-card %}
+<div class="card mb-2">
+    <div class="card-body d-flex justify-content-between align-items-start">
+        <div>
+            <span class="badge bg-secondary me-2">{{ forloop.counter }}</span>
+            <strong>{{ step.title }}</strong>
+            {% if step.is_complete %}
+            <span class="badge bg-success ms-2">Complete</span>
+            {% endif %}
+            {% if step.description %}
+            <p class="mb-0 mt-1 small text-muted">{{ step.description }}</p>
+            {% endif %}
+        </div>
+        <a href="{% url 'maker_projects:build_step_edit' step.pk %}"
+            class="btn btn-sm btn-outline-secondary ms-3 flex-shrink-0">
+            Edit
+        </a>
     </div>
-    {% endfor %}
-    <br>
-    <button class="btn btn-primary" type="submit">Save</button>
-</form>
 </div>
+{% endpartialdef step-card %}
+
+<div class="container pb-5">
+
+    <div class="d-flex align-items-center gap-3 mb-3">
+        <a href="{% url 'maker_projects:detail' project.pk %}" class="btn btn-sm btn-outline-secondary">
+            ← Back
+        </a>
+        <h1 class="mb-0">Edit Project</h1>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" id="project-form">
+        {% csrf_token %}
+        {{ form|crispy }}
+
+        <h3 class="mt-4">Project Links</h3>
+        {{ link_formset.management_form }}
+        {% for link in link_formset %}
+        <div class="mb-2">{{ link|crispy }}</div>
+        {% endfor %}
+    </form>
+
+    <hr class="my-4">
+    <h3>Build Steps</h3>
+
+    {% for step in project.build_steps.all %}
+    {% partial step-card %}
+    {% empty %}
+    <p class="text-muted fst-italic">No steps yet — add your first one below.</p>
+    {% endfor %}
+
+    <div class="card mt-3">
+        <div class="card-body">
+            <h6 class="card-title">Step {{ project.build_steps.count|add:1 }}: Add Next Step</h6>
+            <form method="post" action="{% url 'maker_projects:build_step_add' project.pk %}">
+                {% csrf_token %}
+                {{ step_form|crispy }}
+                <button class="btn btn-primary" type="submit">Add Step</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<div style="position: fixed; bottom: 0; left: 0; right: 0; background-color: var(--bg-header);
+            border-top: 1px solid var(--border-color); padding: 12px 24px; z-index: 100;">
+    <div class="container d-flex justify-content-end">
+        <button type="submit" form="project-form" class="btn btn-primary">
+            Save Project
+        </button>
+    </div>
+</div>
+
 {% endblock %}

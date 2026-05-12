@@ -9,12 +9,16 @@
     {% csrf_token %}
     {{ wizard.management_form }}
 
-    {% if wizard.steps.current == 'project' %}
+    {% if wizard.steps.current == 'basic' %}
         <h3>Step 1: Project Details</h3>
-    {% elif wizard.steps.current == 'feature' %}
-        <h3>Step 2: Add a Feature</h3>
+    {% elif wizard.steps.current == 'timeline' %}
+        <h3>Step 2: Timeline</h3>
+    {% elif wizard.steps.current == 'media' %}
+        <h3>Step 3: Image & Goal</h3>
+    {% elif wizard.steps.current == 'build_step' %}
+        <h3>Step 4: Add Your First Build Step</h3>
     {% elif wizard.steps.current == 'link' %}
-        <h3>Step 3: Add a Repository Link</h3>
+        <h3>Step 5: Add a Repository Link</h3>
     {% endif %}
 
     {{ wizard.form|crispy }}
