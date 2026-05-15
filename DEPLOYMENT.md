@@ -1,4 +1,4 @@
-# MakeBuddy — Docker Deployment Guide
+# Maker-Stack  — Docker Deployment Guide
 
 ## Project Structure (new files)
 
