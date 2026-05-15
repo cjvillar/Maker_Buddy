@@ -1,7 +1,7 @@
-# MAKER BUDDY  
+# Maker-Stack (MAKER BUDDY)  
 [![Django CI](https://github.com/cjvillar/Maker_Buddy/actions/workflows/django.yml/badge.svg?branch=main)](https://github.com/cjvillar/Maker_Buddy/actions/workflows/django.yml)
 
-MakerBuddy is a platform to showcase hardware projects—from early prototypes to finished builds.  
+Maker-Stacki s a platform to showcase hardware projects—from early prototypes to finished builds.  
 
 Document your builds with project pages, track components, and share your work with other makers.  
 Discover new ideas, stay accountable, and actually finish what you start.
