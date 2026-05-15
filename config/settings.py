@@ -41,11 +41,14 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
     "0.0.0.0",
     "makerbuddy.cjvillarreal.com",
+    "maker-stack.com", 
     *[h.strip() for h in _raw_hosts.split(",") if h.strip()],
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://makerbuddy.cjvillarreal.com",
+    "https://maker-stack.com",  
+    "https://www.maker-stack.com",
 ]
 
 SITE_ID = 1
