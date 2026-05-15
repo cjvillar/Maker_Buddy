@@ -233,7 +233,7 @@ if USE_CLOUD_STORAGE:
                 "file_overwrite": False,
                 "default_acl": "public-read",
                 "querystring_auth": False,
-                "custom_domain": "media.cjvillarreal.com",
+                "custom_domain": "media.maker-stack.com",
             },
         },
         "staticfiles": {
