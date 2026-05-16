@@ -41,17 +41,17 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
     "0.0.0.0",
     "makerbuddy.cjvillarreal.com",
-    "maker-stack.com", 
+    "maker-stack.com",
     *[h.strip() for h in _raw_hosts.split(",") if h.strip()],
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://makerbuddy.cjvillarreal.com",
-    "https://maker-stack.com",  
+    "https://maker-stack.com",
     "https://www.maker-stack.com",
 ]
 
-SITE_ID = 1
+SITE_ID = 2
 
 # Application definition
 
@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.sites",
+    "django.contrib.sitemaps",
     "django_tasks",
     "django_tasks_db",
     "django.contrib.humanize",
@@ -256,12 +257,22 @@ else:
 
 SECURE_CSP = {
     "default-src": [CSP.SELF],
-    "connect-src": [CSP.SELF, "https://cdn.jsdelivr.net"],
+    "connect-src": [
+        CSP.SELF,
+        "https://cdn.jsdelivr.net",
+        "https://www.google-analytics.com",
+        "https://analytics.google.com",
+        "https://www.google.com",
+        "https://cloudflareinsights.com",
+    ],
     "script-src": [
         CSP.SELF,
         CSP.NONCE,
         "https://cdn.jsdelivr.net",
         "https://stackpath.bootstrapcdn.com",
+        "https://www.googletagmanager.com",
+        "https://www.google-analytics.com",
+        "https://static.cloudflareinsights.com",
     ],
     "style-src": [
         CSP.SELF,
@@ -275,7 +286,12 @@ SECURE_CSP = {
         "https://cdn.jsdelivr.net",
         "https://fonts.gstatic.com",
     ],
-    "img-src": [CSP.SELF, "https:"],
+    "img-src": [
+        CSP.SELF,
+        "https:",
+        "https://www.google-analytics.com",
+        "https://www.googletagmanager.com",
+    ],
 }
 
 

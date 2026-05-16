@@ -205,5 +205,3 @@ class BuildStepTests(TestCase):
         url = reverse("maker_projects:build_step_edit", args=[step.pk])
         self.client.post(url, {"action": "delete"})
         self.assertFalse(BuildStep.objects.filter(pk=step.pk).exists())
-
-   
