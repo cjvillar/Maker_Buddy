@@ -1,4 +1,15 @@
 {% extends "base.html" %}
+
+{% block meta_description %}{{ project.description|truncatechars:160 }}{% endblock %}
+{% block meta_keywords %}{{ project.title }}, maker, hardware, electronics{% endblock %}
+{% block og_title %}{{ project.title }} — Maker-Stack{% endblock %}
+{% block og_description %}{{ project.description|truncatechars:160 }}{% endblock %}
+{% block title %}{{ project.title }} — Maker-Stack{% endblock %}
+{% if project.image %}
+{% block og_image %}{{ request.scheme }}://{{ request.get_host }}{{ project.image.url }}{% endblock %}
+{% endif %}
+
+
 {% load humanize %}
 {% block content %}
 <div class="container">

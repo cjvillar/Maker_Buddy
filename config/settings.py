@@ -281,6 +281,7 @@ SECURE_CSP = {
         "https://stackpath.bootstrapcdn.com",
         "https://fonts.googleapis.com",
     ],
+    "style-src-attr": [CSP.UNSAFE_INLINE],
     "font-src": [
         CSP.SELF,
         "https://cdn.jsdelivr.net",

@@ -18,6 +18,22 @@
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- default meta tags -->
+  <meta name="description" content="{% block meta_description %}Maker-Stack: a community for hardware makers to share projects, build bills of materials, and track components.{% endblock %}">
+  <meta name="keywords" content="{% block meta_keywords %}maker, hardware, electronics, arduino, raspberry pi, DIY, components {% endblock %}">
+  
+  <!-- Open Graph (for social sharing) -->
+  <meta property="og:title" content="{% block og_title %}Maker-Stack{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}A community for hardware makers to share projects and track components.{% endblock %}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ request.build_absolute_uri }}">
+  
+  <meta property="og:image" content="{% block og_image %}{% endblock %}">
+  
+
+
+
   <link rel="icon" type="image/svg+xml" href="{% static 'images/favicon.svg' %}">
   <title>{% block title %}{% endblock %} Maker-Stack</title>
 
