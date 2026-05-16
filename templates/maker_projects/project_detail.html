@@ -5,7 +5,7 @@
 {% block og_title %}{{ project.title }} — Maker-Stack{% endblock %}
 {% block og_description %}{{ project.description|truncatechars:160 }}{% endblock %}
 {% block title %}{{ project.title }} — Maker-Stack{% endblock %}
-{% block og_image %}{% if project.image %}{{ request.scheme }}://{{ request.get_host }}{{ project.image.url }}{% endif %}{% endblock %}
+{% block og_image %}{% if project.image %}{{ project.image.url }}{% endif %}{% endblock %}
 
 {% load humanize %}
 {% block content %}
