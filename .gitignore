@@ -12,6 +12,7 @@ profile_pics/*
 !profile_pics/.gitkeep
 project_images/*
 !project_images/.gitkeep
+staticfiles/
 
 # Virtual environment
 venv/

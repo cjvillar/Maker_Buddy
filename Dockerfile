@@ -27,7 +27,7 @@ COPY . .
 RUN python manage.py collectstatic --noinput
 
 # Create a non-root user with a real home directory 
-RUN addgroup --system appgroup && adduser --system --ingroup appgroup --home /home/appuser --create-home appuser
+RUN groupadd appgroup && useradd --gid appgroup --home /home/appuser --create-home appuser
 RUN chown -R appuser:appgroup /app
 USER appuser
 
