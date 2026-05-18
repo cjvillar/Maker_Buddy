@@ -9,7 +9,9 @@ __pycache__/
 *.log
 media/
 profile_pics/*
+!profile_pics/.gitkeep
 project_images/*
+!project_images/.gitkeep
 
 # Virtual environment
 venv/
