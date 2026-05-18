@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models import Q
 from django.utils import timezone
+from django.utils.text import slugify
 from django.contrib.auth.models import User
 
 from django.core.exceptions import ValidationError
@@ -71,6 +72,25 @@ class MakerProject(models.Model):
 
     def __str__(self):
         return self.title
+
+    slug = models.SlugField(max_length=255, unique=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base = slugify(self.title)
+            slug = base
+            n = 1
+            # unique if two projects share same title
+            while MakerProject.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                slug = f"{base}-{n}"
+                n += 1
+            self.slug = slug
+        super().save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        from django.urls import reverse
+
+        return reverse("maker_projects:detail", kwargs={"slug": self.slug})
 
 
 class ProjectLink(models.Model):

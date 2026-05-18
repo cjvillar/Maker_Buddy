@@ -49,7 +49,7 @@ class DeleteProjectTests(TestCase):
 
     def test_owner_edit_project(self):
         response = self.client.get(
-            reverse("maker_projects:edit", args=[self.project.pk])
+            reverse("maker_projects:edit", args=[self.project.slug])
         )
         self.assertEqual(response.status_code, 200)
 
@@ -67,7 +67,7 @@ class ProjectDetailTests(TestCase):
         self.client.login(username="test_user", password="pass")
 
     def test_project_detail_page(self):
-        url = reverse("maker_projects:detail", args=[self.project.pk])
+        url = reverse("maker_projects:detail", args=[self.project.slug])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "TEST PROJECT")  # template forces uppercase
@@ -107,7 +107,7 @@ class DeleteProjectTests(TestCase):
 
     def test_owner_edit_project(self):
         response = self.client.get(
-            reverse("maker_projects:edit", args=[self.project.pk])
+            reverse("maker_projects:edit", args=[self.project.slug])
         )
         self.assertEqual(response.status_code, 200)
 
@@ -125,7 +125,7 @@ class ProjectDetailTests(TestCase):
         self.client.login(username="test_user", password="pass")
 
     def test_project_detail_page(self):
-        url = reverse("maker_projects:detail", args=[self.project.pk])
+        url = reverse("maker_projects:detail", args=[self.project.slug])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "TEST PROJECT")  # template forces uppercase
@@ -158,22 +158,22 @@ class BuildStepTests(TestCase):
         self.assertFalse(step.is_complete)
 
     def test_add_step_view(self):
-        url = reverse("maker_projects:build_step_add", args=[self.project.pk])
+        url = reverse("maker_projects:build_step_add", args=[self.project.slug])
         response = self.client.post(
             url, {"title": "First step", "description": "Do this"}
         )
         self.assertEqual(self.project.build_steps.count(), 1)
         self.assertRedirects(
-            response, reverse("maker_projects:edit", args=[self.project.pk])
+            response, reverse("maker_projects:edit", args=[self.project.slug])
         )
 
     def test_add_step_requires_title(self):
-        url = reverse("maker_projects:build_step_add", args=[self.project.pk])
+        url = reverse("maker_projects:build_step_add", args=[self.project.slug])
         self.client.post(url, {"title": "", "description": "No title"})
         self.assertEqual(self.project.build_steps.count(), 0)
 
     def test_add_step_order_auto_assigned(self):
-        url = reverse("maker_projects:build_step_add", args=[self.project.pk])
+        url = reverse("maker_projects:build_step_add", args=[self.project.slug])
         self.client.post(url, {"title": "Step one", "description": ""})
         self.client.post(url, {"title": "Step two", "description": ""})
         steps = list(self.project.build_steps.order_by("order"))

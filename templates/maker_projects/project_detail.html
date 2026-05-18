@@ -4,7 +4,7 @@
 {% block meta_keywords %}{{ project.title }}, maker, hardware, electronics{% endblock %}
 {% block og_title %}{{ project.title }} — Maker-Stack{% endblock %}
 {% block og_description %}{{ project.description|truncatechars:160 }}{% endblock %}
-{% block title %}{{ project.title }} — Maker-Stack{% endblock %}
+{% block title %} {{project.title}} {% endblock %}
 {% block og_image %}{% if project.image %}{{ project.image.url }}{% endif %}{% endblock %}
 
 {% load humanize %}
@@ -110,15 +110,15 @@
 
   {% if user == project.owner %}
   <div class="d-flex gap-2 mb-4">
-    <a href="{% url 'maker_projects:edit' project.pk %}" class="btn btn-sm btn-outline-secondary">Edit</a>
-    <a href="{% url 'maker_projects:delete' project.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+    <a href="{% url 'maker_projects:edit' project.slug %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+    <a href="{% url 'maker_projects:delete' project.slug %}" class="btn btn-sm btn-outline-danger">Delete</a>
     {% if project.status == "active" %}
-    <a href="{% url 'maker_projects:confirm_complete' project.pk %}" class="btn btn-sm btn-outline-warning">Complete</a>
+    <a href="{% url 'maker_projects:confirm_complete' project.slug %}" class="btn btn-sm btn-outline-warning">Complete</a>
     {% endif %}
   </div>
   {% endif %}
 
-  <form action="{% url 'maker_projects:project_like' project.pk %}" method="post">
+  <form action="{% url 'maker_projects:project_like' project.slug %}" method="post">
     {% csrf_token %}
     <button class="btn btn-primary" type="submit">
       LIKES <span class="badge badge-light"> {{ project.likes.count }} </span>

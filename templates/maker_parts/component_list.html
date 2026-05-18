@@ -8,7 +8,8 @@
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h1 class="mb-0">Parts Catalog</h1>
     {% if active_project %}
-    <a href="{% url 'maker_projects:detail' active_project.pk %}#bom"
+  
+    <a href="{% url 'maker_projects:detail' active_project.slug %}#bom"
       class="badge bg-success fs-6 text-decoration-none px-3 py-2">
       <i class="fa-solid fa-folder-open me-1"></i>{{ active_project.title }}
     </a>

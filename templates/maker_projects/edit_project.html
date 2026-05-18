@@ -26,7 +26,7 @@
 <div class="container pb-5">
 
     <div class="d-flex align-items-center gap-3 mb-3">
-        <a href="{% url 'maker_projects:detail' project.pk %}" class="btn btn-sm btn-outline-secondary">
+        <a href="{% url 'maker_projects:detail' project.slug %}" class="btn btn-sm btn-outline-secondary">
             ← Back
         </a>
         <h1 class="mb-0">Edit Project</h1>
@@ -55,7 +55,7 @@
     <div class="card mt-3">
         <div class="card-body">
             <h6 class="card-title">Step {{ project.build_steps.count|add:1 }}: Add Next Step</h6>
-            <form method="post" action="{% url 'maker_projects:build_step_add' project.pk %}">
+            <form method="post" action="{% url 'maker_projects:build_step_add' slug=project.slug %}">
                 {% csrf_token %}
                 {{ step_form|crispy }}
                 <button class="btn btn-primary" type="submit">Add Step</button>

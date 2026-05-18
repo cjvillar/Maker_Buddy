@@ -131,7 +131,7 @@ class RemoveFromProjectView(LoginRequiredMixin, View):
         part_name = project_part.component.manufacturer_pn
         project_part.delete()
         messages.success(request, f'{part_name} removed from "{project.title}".')
-        # return redirect("maker_projects:detail", pk=project.pk)
+        
         return redirect(
-            reverse("maker_projects:detail", kwargs={"pk": project.pk}) + "#bom"
+            reverse("maker_projects:detail", kwargs={"slug": project.slug}) + "#bom"
         )

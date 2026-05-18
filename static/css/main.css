@@ -137,6 +137,12 @@ a:hover {
   background-color: var(--bg-card);
   border-color: var(--border-color);
   box-shadow: var(--card-shadow);
+  cursor: pointer;
+  transition: box-shadow 0.15s ease;
+}
+
+.card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 header {
