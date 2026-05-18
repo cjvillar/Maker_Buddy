@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM python:3.14-slim
+FROM python:3.14.0-slim
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -26,8 +26,8 @@ COPY . .
 # Collect static files (uses whitenoise in production)
 RUN python manage.py collectstatic --noinput
 
-# Create a non-root user to run the app
-RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser
+# Create a non-root user with a real home directory 
+RUN addgroup --system appgroup && adduser --system --ingroup appgroup --home /home/appuser --create-home appuser
 RUN chown -R appuser:appgroup /app
 USER appuser
 
