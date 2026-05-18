@@ -1,21 +1,20 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Maker Projects — Maker-Stack{% endblock %}
+{% block title %}{% endblock %}
 {% block meta_description %}Browse hardware maker projects — Arduino, Raspberry Pi, ESP32 and more.{% endblock %}
 
 {% block content %}
-
 <div class="container">
   <h2 class="mb-4">Maker Projects</h2>
 
   {% for project in projects %}
-  <div class="card mb-4">
+  <div class="card mb-4 clickable-card" data-href="{% url 'maker_projects:detail' project.slug %}">
     <div class="card-body">
 
       <div class="d-flex align-items-center gap-2 mb-2">
         <h2 class="card-title mb-0">
-          <a class="title-link" href="{% url 'maker_projects:detail' project.pk %}">
+          <a class="title-link" href="{% url 'maker_projects:detail' project.slug %}">
             {{ project.title }}
           </a>
         </h2>
@@ -65,6 +64,17 @@
     </li>
     {% endif %}
   </ul>
-
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script nonce="{{ csp_nonce }}">
+  document.querySelectorAll('.clickable-card').forEach(card => {
+    card.addEventListener('click', function(e) {
+      if (!e.target.closest('a')) {
+        window.location = this.dataset.href;
+      }
+    });
+  });
+</script>
 {% endblock %}

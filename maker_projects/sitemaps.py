@@ -14,9 +14,6 @@ class ProjectSitemap(Sitemap):
     def lastmod(self, obj):
         return obj.created_at
 
-    def location(self, obj):
-        return reverse("maker_projects:detail", kwargs={"pk": obj.pk})
-
 
 class StaticSitemap(Sitemap):
     changefreq = "monthly"

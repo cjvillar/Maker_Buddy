@@ -13,7 +13,7 @@
                 onclick="return confirm('Delete this step?')">
             Delete
         </button>
-        <a href="{% url 'maker_projects:detail' step.project.pk %}" class="btn btn-sm btn-link">Cancel</a>
+        <a href="{% url 'maker_projects:detail' slug=step.project.slug %}" class="btn btn-sm btn-link">Cancel</a>
     </form>
 
 </div>

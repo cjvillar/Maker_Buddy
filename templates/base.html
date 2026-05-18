@@ -22,7 +22,7 @@
   
 
   <link rel="icon" type="image/svg+xml" href="{% static 'images/favicon.svg' %}">
-  <title> Maker-Stack </title>
+  <title> {% if project.title %} {{project.title}} | Maker-Stack {% else %} Maker-Stack {% endif %}</title>
 
   {% bootstrap_css %}
   {% bootstrap_javascript %}
@@ -74,6 +74,8 @@
 
  <!-- Cookie Banner ---> 
 {% include "partials/cookie_banner.html" %}
+ <!-- JS Scrips project feed ---> 
+{% block scripts %}{% endblock %} 
 
 </body>
 

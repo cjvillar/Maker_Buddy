@@ -10,7 +10,7 @@
 
     {% csrf_token %}
     <button type="submit"  class="btn btn-primary">Yes, delete</button>
-    <a href="{% url 'maker_projects:detail' project.pk %}">Cancel</a>
+    <a href="{% url 'maker_projects:detail' project.slug %}">Cancel</a>
 </form>
 </div>
 {% endblock %}

@@ -62,8 +62,8 @@ class CreateProjectWizard(LoginRequiredMixin, SessionWizardView):
 
 
 @login_required
-def edit_project(request, pk):
-    project = get_object_or_404(MakerProject, pk=pk, owner=request.user)
+def edit_project(request, slug):
+    project = get_object_or_404(MakerProject, slug=slug, owner=request.user)
 
     ProjectLinkFormSet = inlineformset_factory(
         MakerProject,
@@ -82,7 +82,7 @@ def edit_project(request, pk):
         if form.is_valid() and link_formset.is_valid():
             form.save()
             link_formset.save()
-            return redirect("maker_projects:detail", pk=project.pk)
+            return redirect("maker_projects:detail", slug=project.slug)
     else:
         form = MakerProjectForm(instance=project)
         link_formset = ProjectLinkFormSet(instance=project)
@@ -93,15 +93,15 @@ def edit_project(request, pk):
         {
             "form": form,
             "link_formset": link_formset,
-            "step_form": BuildStepForm(),  # always a fresh blank form
+            "step_form": BuildStepForm(),
             "project": project,
         },
     )
 
 
 @login_required
-def delete_project(request, pk):
-    project = get_object_or_404(MakerProject, pk=pk, owner=request.user)
+def delete_project(request, slug):
+    project = get_object_or_404(MakerProject, slug=slug, owner=request.user)
 
     if request.method == "POST":
         project.delete()
@@ -111,19 +111,19 @@ def delete_project(request, pk):
 
 
 @login_required
-def complete_project(request, pk):
-    project = get_object_or_404(MakerProject, pk=pk, owner=request.user)
+def complete_project(request, slug):
+    project = get_object_or_404(MakerProject, slug=slug, owner=request.user)
 
     if request.method == "POST":
         project.status = MakerProject.Status.COMPLETED
         project.save()
-        return redirect("maker_projects:detail", pk=project.pk)
+        return redirect("maker_projects:detail", slug=project.slug)
 
     return render(request, "maker_projects/confirm_complete.html", {"project": project})
 
 
-def project_detail(request, pk):
-    project = get_object_or_404(MakerProject.objects.select_related("owner"), pk=pk)
+def project_detail(request, slug):
+    project = get_object_or_404(MakerProject.objects.select_related("owner"), slug=slug)
     parts = project.parts.select_related("component").prefetch_related(
         "component__prices"
     )
@@ -135,8 +135,8 @@ def project_detail(request, pk):
 
 
 @login_required
-def add_project_link(request, project_id):
-    project = get_object_or_404(MakerProject, id=project_id, owner=request.user)
+def add_project_link(request, slug):
+    project = get_object_or_404(MakerProject, slug=slug, owner=request.user)
 
     if request.method == "POST":
         form = ProjectLinkForm(request.POST)
@@ -144,7 +144,7 @@ def add_project_link(request, project_id):
             link = form.save(commit=False)
             link.project = project
             link.save()
-            return redirect("maker_projects:detail", project_id=project.id)
+            return redirect("maker_projects:detail", slug=project.slug)
     else:
         form = ProjectLinkForm()
 
@@ -155,31 +155,31 @@ def add_project_link(request, project_id):
 
 @login_required
 @require_POST
-def add_build_step(request, project_pk):
-    project = get_object_or_404(MakerProject, pk=project_pk, owner=request.user)
+def add_build_step(request, slug):
+    project = get_object_or_404(MakerProject, slug=slug, owner=request.user)
     form = BuildStepForm(request.POST)
     if form.is_valid():
         step = form.save(commit=False)
         step.project = project
         step.order = project.build_steps.count()
         step.save()
-    return redirect("maker_projects:edit", pk=project_pk)
+    return redirect("maker_projects:edit", slug=slug)
 
 
 @login_required
 def edit_build_step(request, pk):
     step = get_object_or_404(BuildStep, pk=pk, project__owner=request.user)
-    project_pk = step.project.pk
+    project_slug = step.project.slug
 
     if request.method == "POST":
         if request.POST.get("action") == "delete":
             step.delete()
-            return redirect("maker_projects:detail", project_pk)
+            return redirect("maker_projects:detail", slug=project_slug)
 
         form = BuildStepEditForm(request.POST, instance=step)
         if form.is_valid():
             form.save()
-            return redirect("maker_projects:detail", project_pk)
+            return redirect("maker_projects:detail", slug=project_slug)
     else:
         form = BuildStepEditForm(instance=step)
 
@@ -195,8 +195,8 @@ def edit_build_step(request, pk):
 
 
 @login_required
-def toggle_like(request, pk):
-    project = get_object_or_404(MakerProject, pk=pk)
+def toggle_like(request, slug):
+    project = get_object_or_404(MakerProject, slug=slug)
     like, created = ProjectLike.objects.get_or_create(
         user=request.user, project=project
     )
