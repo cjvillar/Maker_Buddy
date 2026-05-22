@@ -1,14 +1,15 @@
-# Maker-Stack (MAKER BUDDY)  
+# Maker-Stack (MAKER BUDDY)
+
 [![Django CI](https://github.com/cjvillar/Maker_Buddy/actions/workflows/django.yml/badge.svg?branch=main)](https://github.com/cjvillar/Maker_Buddy/actions/workflows/django.yml)
 
-Maker-Stacki s a platform to showcase hardware projects—from early prototypes to finished builds.  
+Maker-Stacki s a platform to showcase hardware projects—from early prototypes to finished builds.
 
 Document your builds with project pages, track components, and share your work with other makers.  
 Discover new ideas, stay accountable, and actually finish what you start.
 
 ---
 
-##  Quick Start (Docker – Recommended)
+## Quick Start (Docker – Recommended)
 
 This project uses Docker with **PostgreSQL + Gunicorn** for a production-like environment.
 
@@ -23,7 +24,7 @@ POSTGRES_PASSWORD=yourpassword
 SECRET_KEY=your-secret-key
 DEBUG=1
 ALLOWED_HOSTS=localhost,127.0.0.1
-````
+```
 
 ### 2. Build and run
 
@@ -39,9 +40,9 @@ Visit:
 http://localhost:8000
 ```
 
-* PostgreSQL starts in a container
-* Django runs migrations automatically
-* App is served via Gunicorn
+- PostgreSQL starts in a container
+- Django runs migrations automatically
+- App is served via Gunicorn
 
 ---
 
@@ -140,39 +141,42 @@ ProjectLink.objects.filter(link_type="github")
 # Show model fields
 [field.name for field in MakerProject._meta.fields]
 ```
+
 ---
+
 ## Notes
 
-* Docker is the recommended way to run this project
-* The app uses Gunicorn in containers 
-* To reset database:
+- Docker is the recommended way to run this project
+- The app uses Gunicorn in containers
+- To reset database:
 
 ```bash
 docker-compose down
 docker-compose up --build
 ```
 
-
 ### Maker_Parts Tasks
 
 1. Add parts to maker_parts/data/seed_parts.json
 
-
 Test getting parts to list:
+
 ```bash
 python manage.py seed_parts --file maker_parts/data/seed_parts.json --dry-run
 ```
+
 Run:
+
 ```bash
 python manage.py seed_parts --file maker_parts/data/seed_parts.json
 ```
-
 
 Test enqueue_weekly_sync:
 
 ```bash
 docker exec -it maker_buddy-web-1 python manage.py enqueue_weekly_sync
 ```
+
 Check for Ready:
 
 ```bash
@@ -181,7 +185,9 @@ from django_tasks_db.models import DBTaskResult
 print(DBTaskResult.objects.all().values('id', 'status', 'task_path').last())
 "
 ```
+
 Run
+
 ```bash
 docker exec -it maker_buddy-web-1 python manage.py db_worker
 ```
@@ -190,9 +196,8 @@ docker exec -it maker_buddy-web-1 python manage.py db_worker
 docker logs maker_buddy-web-1 --tail 50
 ```
 
-
-
 Running docker:
+
 ```bash
 docker exec -it maker_buddy-web-1 python manage.py seed_parts --file maker_parts/data/seed_parts.json
 ```
@@ -201,5 +206,4 @@ docker exec -it maker_buddy-web-1 python manage.py seed_parts --file maker_parts
 
 ## Future Improvements
 
-* Add deployment guide (After testing a few services TBD)
-
+- Add deployment guide (After testing a few services TBD)
